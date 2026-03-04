@@ -1,0 +1,61 @@
+[05-Dec-2021 10:21:13 UTC] PHP Warning:  require(/home1/logixicg/public_html/phpMyAdmin/vendor/composer/../symfony/polyfill-ctype/bootstrap.php): failed to open stream: No such file or directory in /home1/logixicg/public_html/phpMyAdmin/vendor/composer/autoload_real.php on line 71
+[05-Dec-2021 10:21:13 UTC] PHP Warning:  require(/home1/logixicg/public_html/phpMyAdmin/vendor/composer/../symfony/polyfill-ctype/bootstrap.php): failed to open stream: No such file or directory in /home1/logixicg/public_html/phpMyAdmin/vendor/composer/autoload_real.php on line 71
+[05-Dec-2021 10:21:13 UTC] PHP Fatal error:  require(): Failed opening required '/home1/logixicg/public_html/phpMyAdmin/vendor/composer/../symfony/polyfill-ctype/bootstrap.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/logixicg/public_html/phpMyAdmin/vendor/composer/autoload_real.php on line 71
+[05-Dec-2021 10:21:25 UTC] PHP Warning:  require(/home1/logixicg/public_html/phpMyAdmin/vendor/composer/../symfony/polyfill-ctype/bootstrap.php): failed to open stream: No such file or directory in /home1/logixicg/public_html/phpMyAdmin/vendor/composer/autoload_real.php on line 71
+[05-Dec-2021 10:21:25 UTC] PHP Warning:  require(/home1/logixicg/public_html/phpMyAdmin/vendor/composer/../symfony/polyfill-ctype/bootstrap.php): failed to open stream: No such file or directory in /home1/logixicg/public_html/phpMyAdmin/vendor/composer/autoload_real.php on line 71
+[05-Dec-2021 10:21:25 UTC] PHP Fatal error:  require(): Failed opening required '/home1/logixicg/public_html/phpMyAdmin/vendor/composer/../symfony/polyfill-ctype/bootstrap.php' (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/logixicg/public_html/phpMyAdmin/vendor/composer/autoload_real.php on line 71
+[05-Dec-2021 10:26:12 UTC] PHP Warning:  include(/home1/logixicg/public_html/phpMyAdmin/vendor/composer/../symfony/dependency-injection/Loader/Configurator/Traits/AbstractTrait.php): failed to open stream: No such file or directory in /home1/logixicg/public_html/phpMyAdmin/vendor/composer/ClassLoader.php on line 444
+[05-Dec-2021 10:26:12 UTC] PHP Warning:  include(/home1/logixicg/public_html/phpMyAdmin/vendor/composer/../symfony/dependency-injection/Loader/Configurator/Traits/AbstractTrait.php): failed to open stream: No such file or directory in /home1/logixicg/public_html/phpMyAdmin/vendor/composer/ClassLoader.php on line 444
+[05-Dec-2021 10:26:12 UTC] PHP Warning:  include(): Failed opening '/home1/logixicg/public_html/phpMyAdmin/vendor/composer/../symfony/dependency-injection/Loader/Configurator/Traits/AbstractTrait.php' for inclusion (include_path='.:/opt/cpanel/ea-php74/root/usr/share/pear') in /home1/logixicg/public_html/phpMyAdmin/vendor/composer/ClassLoader.php on line 444
+[05-Dec-2021 10:26:12 UTC] PHP Fatal error:  Trait 'Symfony\Component\DependencyInjection\Loader\Configurator\Traits\AbstractTrait' not found in /home1/logixicg/public_html/phpMyAdmin/vendor/symfony/dependency-injection/Loader/Configurator/ServiceConfigurator.php on line 21
+[05-Dec-2021 10:26:48 UTC] PHP Fatal error:  Uncaught Error: Class 'Twig\Node\Expression\Binary\EqualBinary' not found in /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php:85
+Stack trace:
+#0 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(142): Twig\ExpressionParser->parseExpression()
+#1 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/TokenParser/AutoEscapeTokenParser.php(40): Twig\Parser->subparse(Array, true)
+#2 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(185): Twig\TokenParser\AutoEscapeTokenParser->parse(Object(Twig\Token))
+#3 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(98): Twig\Parser->subparse(NULL, false)
+#4 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(563): Twig\Parser->parse(Object(Twig\TokenStream))
+#5 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(595): Twig\Environment->parse(Object(Twig\TokenStream))
+#6 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ in /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php on line 85
+[05-Dec-2021 10:26:48 UTC] PHP Fatal error:  Uncaught TypeError: Return value of PhpMyAdmin\Response::isAjax() must be of the type bool, null returned in /home1/logixicg/public_html/phpMyAdmin/libraries/classes/Response.php:238
+Stack trace:
+#0 /home1/logixicg/public_html/phpMyAdmin/libraries/classes/Response.php(504): PhpMyAdmin\Response->isAjax()
+#1 [internal function]: PhpMyAdmin\Response->response()
+#2 {main}
+  thrown in /home1/logixicg/public_html/phpMyAdmin/libraries/classes/Response.php on line 238
+[05-Dec-2021 10:26:51 UTC] PHP Fatal error:  Uncaught Error: Class 'Twig\Node\Expression\Unary\NotUnary' not found in /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php:166
+Stack trace:
+#0 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php(70): Twig\ExpressionParser->getPrimary()
+#1 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(142): Twig\ExpressionParser->parseExpression()
+#2 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(98): Twig\Parser->subparse(NULL, false)
+#3 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(563): Twig\Parser->parse(Object(Twig\TokenStream))
+#4 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(595): Twig\Environment->parse(Object(Twig\TokenStream))
+#5 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(408): Twig\Environment->compileSource(Object(Twig\Source))
+#6 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(381): Twig\ in /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php on line 166
+[05-Dec-2021 10:26:51 UTC] PHP Fatal error:  Uncaught Error: Class 'Twig\Node\Expression\Unary\NotUnary' not found in /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php:679
+Stack trace:
+#0 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php(77): Twig\ExpressionParser->parseNotTestExpression(Object(Twig\Node\Expression\NameExpression))
+#1 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/TokenParser/IfTokenParser.php(36): Twig\ExpressionParser->parseExpression()
+#2 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(185): Twig\TokenParser\IfTokenParser->parse(Object(Twig\Token))
+#3 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(98): Twig\Parser->subparse(NULL, false)
+#4 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(563): Twig\Parser->parse(Object(Twig\TokenStream))
+#5 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(595): Twig\Environment->parse(Object(Twig\TokenStream))
+#6 /home1/logixic in /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php on line 679
+[05-Dec-2021 10:26:52 UTC] PHP Fatal error:  Uncaught Error: Class 'Twig\Node\Expression\Unary\NotUnary' not found in /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php:166
+Stack trace:
+#0 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php(70): Twig\ExpressionParser->getPrimary()
+#1 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(142): Twig\ExpressionParser->parseExpression()
+#2 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(98): Twig\Parser->subparse(NULL, false)
+#3 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(563): Twig\Parser->parse(Object(Twig\TokenStream))
+#4 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(595): Twig\Environment->parse(Object(Twig\TokenStream))
+#5 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(408): Twig\Environment->compileSource(Object(Twig\Source))
+#6 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(381): Twig\ in /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php on line 166
+[05-Dec-2021 10:26:52 UTC] PHP Fatal error:  Uncaught Error: Class 'Twig\Node\Expression\Unary\NotUnary' not found in /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php:679
+Stack trace:
+#0 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php(77): Twig\ExpressionParser->parseNotTestExpression(Object(Twig\Node\Expression\NameExpression))
+#1 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/TokenParser/IfTokenParser.php(36): Twig\ExpressionParser->parseExpression()
+#2 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(185): Twig\TokenParser\IfTokenParser->parse(Object(Twig\Token))
+#3 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Parser.php(98): Twig\Parser->subparse(NULL, false)
+#4 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(563): Twig\Parser->parse(Object(Twig\TokenStream))
+#5 /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/Environment.php(595): Twig\Environment->parse(Object(Twig\TokenStream))
+#6 /home1/logixic in /home1/logixicg/public_html/phpMyAdmin/vendor/twig/twig/src/ExpressionParser.php on line 679

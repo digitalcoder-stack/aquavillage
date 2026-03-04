@@ -1,0 +1,1 @@
+[03-Jul-2025 13:18:34 Asia/Kolkata] PHP Fatal error:  Allowed memory size of 536870912 bytes exhausted (tried to allocate 115351552 bytes) in /home2/sauraa7r/aquavillage.co.in/myadmin/application/views/lockers_list.php on line 465
