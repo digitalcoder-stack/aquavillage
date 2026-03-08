@@ -638,6 +638,26 @@
                                         </a>
                                     <?php } ?>
                                 </div>
+
+                            <?php }
+                            if ($logged_user_type == 1 || has_perm($logged_user_id, 'VCH', 'DCNT')) { ?>
+                                <div class="new-nav-cat">
+                                    <a href="<?php echo site_url('Vouchers/discount_list') ?>" class="new-nav-link <?php if ($this->uri->segment(2) == 'discount_list') {
+                                                                                                                        echo 'active';
+                                                                                                                    } ?>">
+                                        <img src="<?php echo base_url('assets/img/icons/money.png') ?>">
+                                        <span>Discount List</span>
+                                    </a>
+                                    <?php if ($logged_user_type == 1 || has_perm($logged_user_id, 'VCH', 'DCNT', 'Add')) { ?>
+                                        <a href="<?php echo site_url('Vouchers/add_discount') ?>" class="new-nav-link <?php if ($this->uri->segment(2) == 'add_discount') {
+                                                                                                                            echo 'active';
+                                                                                                                        } ?>">
+                                            <img src="<?php echo base_url('assets/img/icons/money.png') ?>">
+                                            <span>Add Discount</span>
+                                        </a>
+                                    <?php } ?>
+                                </div>
+                                <div class="line"></div>
                             <?php } ?>
                         </div>
                     </div>
@@ -942,18 +962,18 @@
                                         <span>Advance</span>
                                     </a>
                                 <?php }
-                                if ($logged_user_type == 1 || has_perm($logged_user_id, 'HR', 'SYIT','Add')) { ?>
+                                if ($logged_user_type == 1 || has_perm($logged_user_id, 'HR', 'SYIT', 'Add')) { ?>
                                     <a href="<?php echo site_url('HrDept/add_monthly_salary') ?>" class="new-nav-link <?php if ($this->uri->segment(2) == 'add_monthly_salary') {
-                                                                                                                    echo 'active';
-                                                                                                                } ?>">
+                                                                                                                            echo 'active';
+                                                                                                                        } ?>">
                                         <img src="<?php echo base_url('assets/img/icons/salary.png') ?>">
                                         <span>Add Salary</span>
                                     </a>
                                 <?php }
                                 if ($logged_user_type == 1 || has_perm($logged_user_id, 'HR', 'SYIT')) { ?>
                                     <a href="<?php echo site_url('HrDept/salary_history') ?>" class="new-nav-link <?php if ($this->uri->segment(2) == 'salary_history') {
-                                                                                                                    echo 'active';
-                                                                                                                } ?>">
+                                                                                                                        echo 'active';
+                                                                                                                    } ?>">
                                         <img src="<?php echo base_url('assets/img/icons/salary.png') ?>">
                                         <span>Salary List</span>
                                     </a>

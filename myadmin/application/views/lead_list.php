@@ -282,8 +282,8 @@ $logged_user_type = $this->session->userdata('user_type');
 
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
-                                                                        <label>Adult <span class="text-danger">*</span></label>
-                                                                        <input type="number" name="m_ticket_adult" id="m_ticket_adult<?= $value->m_lead_id ?>" class="form-control amountcalculate" data-count="<?= $value->m_lead_id ?>" placeholder="Adult" required="" value="<?= $value->m_lead_minvisits ?>">
+                                                                        <label>Family <span class="text-danger">*</span></label>
+                                                                        <input type="number" name="m_ticket_adult" id="m_ticket_adult<?= $value->m_lead_id ?>" class="form-control amountcalculate" data-count="<?= $value->m_lead_id ?>" placeholder="Family" required="" value="<?= $value->m_lead_minvisits ?>">
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-4">

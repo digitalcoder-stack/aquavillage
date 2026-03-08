@@ -301,7 +301,7 @@ class Student_model extends CI_model
 
         $resadult = (object) array(
           'id' => $krry->m_lead_id,
-          'Name' => 'Adult (' . $krry->m_lead_rateph . ')',
+          'Name' => 'Family (' . $krry->m_lead_rateph . ')',
           'count' => $krry->m_ticket_adult,
           'netto_amt' => ($krry->m_ticket_netAmt),
           'paid_amt' => ($krry->m_ticket_paidAmt + $krry->m_ticket_paidAmt2),

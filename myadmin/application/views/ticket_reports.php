@@ -124,8 +124,8 @@ $logged_user_type = $this->session->userdata('user_type');
                                     <tr>
                                         <th>Sno.</th>
                                         <th>Mode</th>
-                                        <th>Total Adult</th>
-                                        <th>Total Child</th>
+                                        <th>Total Family</th>
+                                        <th>Total Stag</th>
                                         <th>Total Free</th>
                                         <th>Total Person</th>
                                         <th>Total Amount</th>
@@ -217,8 +217,8 @@ $logged_user_type = $this->session->userdata('user_type');
                                         <th>Ticket No</th>
                                         <th>Mode</th>
                                         <th>CustomerName</th>
-                                        <th>Adult</th>
-                                        <th>Child</th>
+                                        <th>Family</th>
+                                        <th>Stag</th>
                                         <th>Total</th>
                                         <th>City</th>
                                         <th>PlotNo</th>

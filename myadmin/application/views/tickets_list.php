@@ -136,8 +136,8 @@ $logged_user_type = $this->session->userdata('user_type');
                             <th>Ticket No</th>
                             <th>Mode</th>
                             <th>Mobile No</th>
-                            <th>Adult</th>
-                            <th>Child</th>
+                            <th>Family</th>
+                            <th>Stag</th>
                             <th>Total</th>
                             <th>CustomerName</th>
                             <th>CustomerType</th>
@@ -266,8 +266,8 @@ $logged_user_type = $this->session->userdata('user_type');
                                 <thead>
                                     <th>Sn</th>
                                     <th>Type </th>
-                                    <th>Adult </th>
-                                    <th>Child </th>
+                                    <th>Family </th>
+                                    <th>Stag </th>
                                     <th>Total </th>
                                 </thead>
                                 <tbody id="modal_body_contant">
@@ -321,8 +321,8 @@ $logged_user_type = $this->session->userdata('user_type');
                                 <thead>
                                     <th>Sn</th>
                                     <th>City Name </th>
-                                    <th>Adult </th>
-                                    <th>Child </th>
+                                    <th>Family </th>
+                                    <th>Stag </th>
                                     <th>Total </th>
 
                                 </thead>
@@ -398,8 +398,8 @@ $logged_user_type = $this->session->userdata('user_type');
                                     <th>Ticket No </th>
                                     <th>Customer Name </th>
                                     <th>Customer Mobile </th>
-                                    <th>Adult </th>
-                                    <th>Child </th>
+                                    <th>Family </th>
+                                    <th>Stag </th>
                                     <th>Total </th>
                                     <th>Net Amount </th>
                                     <th>Remark </th>

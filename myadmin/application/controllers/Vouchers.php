@@ -400,6 +400,108 @@ class Vouchers extends CI_Controller
 
   /////////////////////////////////////////// payment /////////////////////////////////////////////////
 
+  /////////////////////////////////////////// Discount /////////////////////////////////////////////////
+
+    public function discount_list()
+    {
+        $data = $this->login_details();
+        $data['pagename'] = "All Discount List";
+
+        $data['discount_value'] = $this->Setup_model->get_discount_list();
+        $this->load->view('discount_list', $data);
+    }
+
+
+    public function add_discount()
+    {
+        $data = $this->login_details();
+
+        $data['id'] = $this->input->get('code');
+
+        if (!empty($data['id'])) {
+            $data['pagename'] = "Edit Discount";
+        } else {
+            $data['pagename'] = "Add New Discount";
+        }
+
+        $data['edit_value'] = $this->Setup_model->get_discount_dtl($data['id']);
+
+        $this->load->view('add_discount', $data);
+    }
+
+
+    public function save_discount()
+    {
+        if ($this->ajax_login() === false) {
+            return;
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            if ($data = $this->Setup_model->insert_discount()) {
+
+                if ($data == 1) {
+
+                    $info = array(
+                        'status' => 'success',
+                        'message' => 'Discount added successfully!'
+                    );
+
+                } else if ($data == 2) {
+
+                    $info = array(
+                        'status' => 'success',
+                        'message' => 'Discount updated successfully!'
+                    );
+
+                }
+
+            } else {
+
+                $info = array(
+                    'status' => 'error',
+                    'message' => 'Some problem occurred! Please try again'
+                );
+
+            }
+
+            echo json_encode($info);
+        }
+    }
+
+
+
+    public function delete_discount()
+    {
+        if ($this->ajax_login() === false) {
+            return;
+        }
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+            if ($this->Setup_model->delete_discount()) {
+
+                $info = array(
+                    'status' => 'success',
+                    'message' => 'Discount deleted successfully!'
+                );
+
+            } else {
+
+                $info = array(
+                    'status' => 'error',
+                    'message' => 'Some problem occurred!'
+                );
+
+            }
+
+            echo json_encode($info);
+        }
+    }
+
+
+  /////////////////////////////////////////// Discount /////////////////////////////////////////////////
+
 
 
 

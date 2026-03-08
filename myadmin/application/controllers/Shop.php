@@ -30,7 +30,7 @@ class Shop extends CI_Controller
     $data['head_dtl'] = $this->Master_model->all_active_saleshead();
     $data['ticket_value'] = $this->Main_model->get_ticket_list($data['from_date'], $data['to_date'], $data['head']);
     $data['city_report'] = $this->Student_model->city_wise_ticket_report($data['from_date'], $data['to_date'], $data['head']);
-// echo'<pre>';print_r($data['city_report']); die;
+    // echo'<pre>';print_r($data['city_report']); die;
     $this->load->view('tickets_list', $data);
   }
 
@@ -62,17 +62,16 @@ class Shop extends CI_Controller
 
   public function get_plotmem_list()
   {
-   
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $plotno = $this->input->post('plotno');
       if ($data = $this->Main_model->get_plotmem_list($plotno)) {
 
-          $info = array(
-            'status' => 'success',
-            'message' => 'fatched successfully!',
-            'data' => $data,
-          );
-       
+        $info = array(
+          'status' => 'success',
+          'message' => 'fatched successfully!',
+          'data' => $data,
+        );
       } else {
         $info = array(
           'status' => 'error',
@@ -87,21 +86,20 @@ class Shop extends CI_Controller
 
   public function get_plotmem_details()
   {
-   
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $memid = $this->input->post('memid');
       if ($data = $this->Main_model->get_plotmem_details($memid)) {
 
-          $info = array(
-            'status' => 'success',
-            'data' => $data,
-          );
-       
+        $info = array(
+          'status' => 'success',
+          'data' => $data,
+        );
       } else {
         $info = array(
           'status' => 'error',
           'message' => 'No data Found Related to this number',
-          
+
         );
       }
 
@@ -111,7 +109,7 @@ class Shop extends CI_Controller
 
   public function convert_lead_ticket()
   {
-  
+
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if ($data = $this->Main_model->convert_lead_ticket()) {
 
@@ -134,7 +132,6 @@ class Shop extends CI_Controller
       }
 
       redirect($_SERVER['HTTP_REFERER']);
-     
     }
   }
   public function insert_ticket()
@@ -223,6 +220,18 @@ class Shop extends CI_Controller
     }
   }
 
+  public function get_applicable_discount()
+  {
+    if ($this->ajax_login() === false) {
+      return;
+    }
+    $data = $this->Setup_model->get_applicable_discount();
+    if ($data) {
+      echo json_encode(['status' => 'success', 'discount' => $data]);
+    } else {
+      echo json_encode(['status' => 'error', 'discount' => '']);
+    }
+  }
 
   public function excelForticket($from_date, $to_date, $head)
   {
@@ -249,7 +258,7 @@ class Shop extends CI_Controller
       $subArray[] = '';
       $subArray[] =  $key->m_ticket_netAmt;
       $subArray[] = date('d-m-Y h:i', strtotime($key->m_ticket_added_on));
-     
+
       $data[] = $subArray;
     }
 
@@ -266,8 +275,8 @@ class Shop extends CI_Controller
       "Dated",
       "Mode",
       "Mobile No.",
-      "Adult",
-      "Child",
+      "Family",
+      "Stag",
       "CustomerName",
       "CustomerType",
       "City",
@@ -276,14 +285,14 @@ class Shop extends CI_Controller
       "PlotOwner",
       "NetAmount",
       "Created on",
-     
+
     );
     fputcsv($file, $header);
     foreach ($report as $line) {
       fputcsv($file, $line);
     }
     fclose($file);
-   
+
     exit;
   }
 
@@ -295,7 +304,7 @@ class Shop extends CI_Controller
   public function locker_list($type = 1)
   {
     $data = $this->login_details();
-   
+
     if (!empty($this->input->post('from_date'))) {
       $data['from_date'] = $this->input->post('from_date');
     } else {
@@ -311,18 +320,18 @@ class Shop extends CI_Controller
       $this->excelForlocker($data['from_date'], $data['to_date']);
     }
 
-    $data['dept']= 2;
+    $data['dept'] = 2;
 
     $data['cashcot_dtl'] = $this->Master_model->get_active_cashacc($data['dept']);
     $data['ticket_value'] = $this->Main_model->get_ticket_list($data['from_date'], $data['to_date']);
-  
-    if($type == 1){
+
+    if ($type == 1) {
       $data['pagename'] = "Create Locker List";
       $data['ticket_value'] = $this->Main_model->get_ticket_list($data['from_date'], $data['to_date']);
-    }else {
+    } else {
       $data['pagename'] = "All Locker List";
       $data['locker_value'] = $this->Main_model->get_locker_list($data['from_date'], $data['to_date']);
-    //  echo '<pre>'; print_r($data['locker_value']); die ;
+      //  echo '<pre>'; print_r($data['locker_value']); die ;
     }
 
     $this->load->view('lockers_list', $data);
@@ -452,7 +461,7 @@ class Shop extends CI_Controller
       $subArray[] =  $key->m_locker_Tdeposit;
       $subArray[] =  $key->m_locker_refund;
       $subArray[] = date('d-m-Y h:i', strtotime($key->m_locker_added_on));
-    
+
       $data[] = $subArray;
     }
 
@@ -469,22 +478,22 @@ class Shop extends CI_Controller
       "Dated",
       "Counter",
       "Mobile No.",
-      "Adult",
-      "Child",
+      "Family",
+      "Stag",
       "CustomerName",
       "Total Locker",
       "Total Rent",
       "Total Deposit",
       "Refund Amount",
       "Created on",
-     
+
     );
     fputcsv($file, $header);
     foreach ($report as $line) {
       fputcsv($file, $line);
     }
     fclose($file);
-  
+
     exit;
   }
 
@@ -495,7 +504,7 @@ class Shop extends CI_Controller
   public function costume_list($type = 1)
   {
     $data = $this->login_details();
-   
+
 
     if (!empty($this->input->post('from_date'))) {
       $data['from_date'] = $this->input->post('from_date');
@@ -511,18 +520,18 @@ class Shop extends CI_Controller
     if (!empty($this->input->post('Excel'))) {
       $this->excelForcostume($data['from_date'], $data['to_date']);
     }
-    if($type == 1){
+    if ($type == 1) {
       $data['pagename'] = "Create costume List";
       $data['ticket_value'] = $this->Main_model->get_ticket_list($data['from_date'], $data['to_date']);
-    }else {
+    } else {
       $data['pagename'] = "All costume List";
       $data['costume_value'] = $this->Main_model->get_costume_list($data['from_date'], $data['to_date']);
-    //  echo '<pre>'; print_r($data['costume_value']); die ;
+      //  echo '<pre>'; print_r($data['costume_value']); die ;
     }
     $data['dept'] = 2;
     $data['cashcot_dtl'] = $this->Master_model->get_active_cashacc($data['dept']);
-   
-  
+
+
     $this->load->view('costume_list', $data);
   }
 
@@ -538,9 +547,9 @@ class Shop extends CI_Controller
     }
     $data['dept'] = 2;
     $data['cashcot_dtl'] = $this->Master_model->get_active_cashacc($data['dept']);
- 
-    $data['cosCode'] = $this->Setup_model->get_Active_product(null,2,2);
-  
+
+    $data['cosCode'] = $this->Setup_model->get_Active_product(null, 2, 2);
+
     $data['user_lst'] = $this->Main_model->get_ticket_customer($data['ticketid']);
     $data['edit_value'] = $this->Main_model->get_costume_dtl($data['id']);
 
@@ -647,7 +656,7 @@ class Shop extends CI_Controller
       $subArray[] =  $key->m_costume_Tdeposit;
       $subArray[] =  $key->m_costume_refund;
       $subArray[] = date('d-m-Y h:i', strtotime($key->m_costume_added_on));
-     
+
       $data[] = $subArray;
     }
 
@@ -664,21 +673,21 @@ class Shop extends CI_Controller
       "Dated",
       "Counter",
       "Mobile No.",
-      "Adult",
-      "Child",
+      "Family",
+      "Stag",
       "CustomerName",
       "Total Rent",
       "Total Deposit",
       "Refund Amount",
       "Created on",
-     
+
     );
     fputcsv($file, $header);
     foreach ($report as $line) {
       fputcsv($file, $line);
     }
     fclose($file);
-   
+
     exit;
   }
 
@@ -688,7 +697,7 @@ class Shop extends CI_Controller
   /////////////////////////////////////////// sales /////////////////////////////////////////////////
   public function sales_list()
   {
-  
+
     $data = $this->login_details();
     $data['pagename'] = "All Sales List";
     if (!empty($this->input->post('from_date'))) {
@@ -721,7 +730,7 @@ class Shop extends CI_Controller
     }
     $data['dept'] = 2;
     $data['cashcot_dtl'] = $this->Master_model->get_active_cashacc($data['dept']);
-    $data['products'] = $this->Setup_model->get_Active_product(null,2,1);
+    $data['products'] = $this->Setup_model->get_Active_product(null, 2, 1);
     $data['user_lst'] = $this->Main_model->get_ticket_selectedList();
     $data['edit_value'] = $this->Main_model->get_sales_dtl($data['id']);
 
@@ -898,7 +907,7 @@ class Shop extends CI_Controller
     if (!empty($this->input->post('Excel'))) {
       $this->excelForplot($data['from_date'], $data['to_date']);
     }
-    
+
     $data['plot_value'] = $this->Main_model->get_plot_list($data['from_date'], $data['to_date']);
     $this->load->view('plots_list', $data);
   }
@@ -939,7 +948,6 @@ class Shop extends CI_Controller
             'status' => 'success',
             'message' => 'Plot data Updated Successfully'
           );
-      
         } else if ($data == 3) {
           $info = array(
             'status' => 'error',
@@ -1036,7 +1044,7 @@ class Shop extends CI_Controller
     $count = 0;
     $data = array();
     foreach ($allreportdata as $key) {
-      
+
       $count++;
       $subArray = array();
 
@@ -1046,11 +1054,11 @@ class Shop extends CI_Controller
       $subArray[] = $key->m_city_name;
       $subArray[] = $key->m_plot_mobile;
       $subArray[] = $this->Main_model->get_plotmem_count($key->m_plot_id);
-      $subArray[] = $key->reg_paper_rcvd == 1? 'Yes':'No '; ;
-      $subArray[] =  $key->is_adhar_rcvd == 1? 'Yes':'No ';
+      $subArray[] = $key->reg_paper_rcvd == 1 ? 'Yes' : 'No ';;
+      $subArray[] =  $key->is_adhar_rcvd == 1 ? 'Yes' : 'No ';
       $subArray[] =  $key->m_plot_aadhar_no;
       $subArray[] =  $key->m_plot_remark;
-     
+
       $data[] = $subArray;
     }
 

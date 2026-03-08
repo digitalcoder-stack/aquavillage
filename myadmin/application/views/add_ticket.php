@@ -120,7 +120,7 @@ $logged_user_type = $this->session->userdata('user_type');
             $customer  = $edit_value->m_ticket_customer;
             $paymode      = $edit_value->m_ticket_paymode;
             $cust_mobile  = $edit_value->m_cust_mobile;
-            $adult        = $edit_value->m_ticket_adult;
+            $Family        = $edit_value->m_ticket_adult;
             $child        = $edit_value->m_ticket_child;
             $ticfree        = $edit_value->m_ticket_free;
             $cust_name    = $edit_value->m_cust_name;
@@ -132,6 +132,8 @@ $logged_user_type = $this->session->userdata('user_type');
             $gstAmt       = $edit_value->m_ticket_gstAmt;
             $discount     = $edit_value->m_ticket_discount;
             $netAmt       = $edit_value->m_ticket_netAmt;
+            $is_discount_applied  = $edit_value->is_discount_applied;
+            $m_ticket_disprt  = $edit_value->m_ticket_disprt;
 
             $paidAmt2      = $edit_value->m_ticket_paidAmt2;
             if ($edit_value->m_ticket_status == 0) {
@@ -157,7 +159,7 @@ $logged_user_type = $this->session->userdata('user_type');
             $customer = '';
             $paymode = '';
             $cust_mobile = '';
-            $adult = 0;
+            $Family = 0;
             $child = 0;
             $ticfree = 0;
             $cust_name = '';
@@ -170,6 +172,8 @@ $logged_user_type = $this->session->userdata('user_type');
             $gstAmt   = 0;
             $discount = 0;
             $netAmt   = 0;
+            $is_discount_applied   = 0;
+            $m_ticket_disprt   = 0;
             $paidAmt  = '';
             $paidAmt2  = '';
             $balAmt   = 0;
@@ -213,22 +217,22 @@ $logged_user_type = $this->session->userdata('user_type');
                     <h5>Band Colours and Balance stock</h5>
                     <div class="row" style="border-bottom: solid 0.5px #b5b5b5;margin-bottom: 8px;">
                         <div class="col-md-3">
-                            <div>Water Park Adult: <span class="badge" style="background-color: <?= $band_stk->wpat_bndclr ?>; <?php if ($band_stk->wpat_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->wpat_bndclr ?> (<?= $band_stk->wpat_stock ?>) </span></div>
+                            <div>Water Park Family: <span class="badge" style="background-color: <?= $band_stk->wpat_bndclr ?>; <?php if ($band_stk->wpat_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->wpat_bndclr ?> (<?= $band_stk->wpat_stock ?>) </span></div>
                         </div>
                         <div class="col-md-3">
-                            <div>Water Park Child: <span class="badge" style="background-color: <?= $band_stk->wpcd_bndclr ?>; <?php if ($band_stk->wpcd_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->wpcd_bndclr ?> (<?= $band_stk->wpcd_stock ?>) </span></div>
+                            <div>Water Park Stag: <span class="badge" style="background-color: <?= $band_stk->wpcd_bndclr ?>; <?php if ($band_stk->wpcd_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->wpcd_bndclr ?> (<?= $band_stk->wpcd_stock ?>) </span></div>
                         </div>
                         <div class="col-md-3">
-                            <div>Advanture Park Adult: <span class="badge" style="background-color: <?= $band_stk->adat_bndclr ?>; <?php if ($band_stk->adat_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->adat_bndclr ?> (<?= $band_stk->adat_stock ?>) </span></div>
+                            <div>Advanture Park Family: <span class="badge" style="background-color: <?= $band_stk->adat_bndclr ?>; <?php if ($band_stk->adat_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->adat_bndclr ?> (<?= $band_stk->adat_stock ?>) </span></div>
                         </div>
                         <div class="col-md-3">
-                            <div>Advanture Park Child: <span class="badge" style="background-color: <?= $band_stk->adcld_bndclr ?>; <?php if ($band_stk->adcld_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->adcld_bndclr ?> (<?= $band_stk->adcld_stock ?>) </span></div>
+                            <div>Advanture Park Stag: <span class="badge" style="background-color: <?= $band_stk->adcld_bndclr ?>; <?php if ($band_stk->adcld_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->adcld_bndclr ?> (<?= $band_stk->adcld_stock ?>) </span></div>
                         </div>
                         <div class="col-md-3">
-                            <div>Combo Adult: <span class="badge" style="background-color: <?= $band_stk->coat_bndclr ?>; <?php if ($band_stk->coat_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->coat_bndclr ?> (<?= $band_stk->coat_stock ?>) </span></div>
+                            <div>Combo Family: <span class="badge" style="background-color: <?= $band_stk->coat_bndclr ?>; <?php if ($band_stk->coat_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->coat_bndclr ?> (<?= $band_stk->coat_stock ?>) </span></div>
                         </div>
                         <div class="col-md-3">
-                            <div>Combo Child: <span class="badge" style="background-color: <?= $band_stk->cocld_bndclr ?>; <?php if ($band_stk->cocld_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->cocld_bndclr ?> (<?= $band_stk->cocld_stock ?>) </span></div>
+                            <div>Combo Stag: <span class="badge" style="background-color: <?= $band_stk->cocld_bndclr ?>; <?php if ($band_stk->cocld_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->cocld_bndclr ?> (<?= $band_stk->cocld_stock ?>) </span></div>
                         </div>
                         <div class="col-md-3">
                             <div>Member : <span class="badge" style="background-color: <?= $band_stk->mem_bndclr ?>; <?php if ($band_stk->mem_bndclr == 'White') echo 'color:black;' ?>"><?= $band_stk->mem_bndclr ?> (<?= $band_stk->mem_stock ?>) </span></div>
@@ -385,21 +389,29 @@ $logged_user_type = $this->session->userdata('user_type');
 
                                     <div class="col-lg-2 col-md-3 col-sm-4">
                                         <div class="form-group">
-                                            <label>Adult <span class="text-danger">*</span></label>
-                                            <input type="number" name="m_ticket_adult" id="m_ticket_adult" class="form-control amountcalculate" placeholder="Adult" required="" value="<?= $adult ?>" autofocus>
+                                            <label>Family <span class="text-danger">*</span></label>
+                                            <input type="number" name="m_ticket_adult" id="m_ticket_adult" class="form-control amountcalculate" placeholder="Family" required="" value="<?= $Family ?>" autofocus>
                                         </div>
                                     </div>
 
                                     <div class="col-lg-2 col-md-3 col-sm-4">
                                         <div class="form-group">
-                                            <label>Children <span class="text-danger">*</span></label>
-                                            <input type="number" name="m_ticket_child" id="m_ticket_child" class="form-control amountcalculate" placeholder="Child" required="" value="<?= $child ?>" autofocus>
+                                            <label>Stag <span class="text-danger">*</span></label>
+                                            <input type="number" name="m_ticket_child" id="m_ticket_child" class="form-control amountcalculate" placeholder="Stag" required="" value="<?= $child ?>" autofocus>
                                         </div>
                                     </div>
                                     <div class="col-lg-2 col-md-3 col-sm-4">
                                         <div class="form-group">
                                             <label>Free </label>
                                             <input type="number" name="m_ticket_free" id="m_ticket_free" class="form-control" placeholder="Free" value="<?= $ticfree ?>" autofocus>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-2 col-md-3 col-sm-4" style="margin-top: 30px;">
+                                        <div class="form-group">
+                                            <input type="hidden" name="m_ticket_disprt" id="m_ticket_disprt" class="form-control" value="<?= $m_ticket_disprt ?>">
+                                            <input type="checkbox" name="is_discount_applied" id="is_discount_applied" class="form-control" value="1" <?php if ($is_discount_applied == 1) { echo 'checked';} ?>>
+                                            <label for="is_discount_applied">Apply Seasonal Discount </label>
                                         </div>
                                     </div>
 
@@ -566,10 +578,10 @@ $logged_user_type = $this->session->userdata('user_type');
                                         $childnet = round(($child_rate * 0.18) + $child_rate);
                                     }
                                     ?>
-                                    <div class="col-md-12 itemdiv">Adult Base <span class="valuediv" id="adultbase"><?= $adult_rate ?></span></div>
-                                    <div class="col-md-12 itemdiv">Adult Net <span class="valuediv" id="adultnet"><?= $adultnet ?></span></div>
-                                    <div class="col-md-12 itemdiv">Child Base <span class="valuediv" id="childbase"><?= $child_rate ?></span></div>
-                                    <div class="col-md-12 itemdiv">Child Net <span class="valuediv" id="childnet"><?= $childnet ?></span></div>
+                                    <div class="col-md-12 itemdiv">Family Base <span class="valuediv" id="adultbase"><?= $adult_rate ?></span></div>
+                                    <div class="col-md-12 itemdiv">Family Net <span class="valuediv" id="adultnet"><?= $adultnet ?></span></div>
+                                    <div class="col-md-12 itemdiv">Stag Base <span class="valuediv" id="childbase"><?= $child_rate ?></span></div>
+                                    <div class="col-md-12 itemdiv">Stag Net <span class="valuediv" id="childnet"><?= $childnet ?></span></div>
                                     <div class="col-md-12 itemdiv">GST <span class="valuediv" id="gst">18</span></div>
 
                                 </div>
@@ -728,8 +740,8 @@ $logged_user_type = $this->session->userdata('user_type');
                                     <th>Ticket No </th>
                                     <th>Customer Name </th>
                                     <th>Customer Mobile </th>
-                                    <th>Adult </th>
-                                    <th>Child </th>
+                                    <th>Family </th>
+                                    <th>Stag </th>
                                     <th>Total </th>
                                     <th>Net Amount </th>
                                     <th>Remark </th>

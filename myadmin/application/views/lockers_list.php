@@ -124,8 +124,8 @@ $logged_user_id = $this->session->userdata('user_id') ; $logged_user_type = $thi
                                 <th>Dated</th>
                                 <th>Mode</th>
                                 <th>Mobile No</th>
-                                <th>Adult</th>
-                                <th>Child</th>
+                                <th>Family</th>
+                                <th>Stag</th>
                                 <th>CustomerName</th>
                                 <th>Created on</th>
                                 <th>Refund</th>

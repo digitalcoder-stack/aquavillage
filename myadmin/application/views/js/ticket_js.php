@@ -171,28 +171,63 @@
         gst = 0;
       }
 
-      let adultTAmt = adultCount * adultbase
-      let childTAmt = childCount * childbase
-      let totalAmt = adultTAmt + childTAmt
-      $('.m_ticket_totalAmt').val(totalAmt);
+      let adultTAmt = adultCount * adultbase;
+      let childTAmt = childCount * childbase;
+      let totalAmt = adultTAmt + childTAmt;
+      $('.m_ticket_totalAmt').val(totalAmt.toFixed(2));
 
       let gstAmt = totalAmt * gst;
+      let nextAmt = Math.round(gstAmt + totalAmt);
       $('.m_ticket_gstAmt').val(gstAmt.toFixed(2))
-      $('.m_ticket_netAmt').val(Math.round(gstAmt + totalAmt))
+      $('.m_ticket_netAmt').val(nextAmt);
+
+      let secDiscount_amt = 0;
+      let discount_prt = 0;
+
+      if ($("#is_discount_applied").is(":checked")) {
+        let pack_size = parseInt(adultCount) + parseInt(childCount);
+        if (pack_size > 0) {
+          $.ajax({
+            type: "POST",
+            url: "<?php echo base_url('Shop/get_applicable_discount'); ?>",
+            data: {
+              pack_size: pack_size
+            },
+            dataType: "JSON",
+            async: false, // Make it synchronous to wait for response
+            success: function(data) {
+              if (data.status == 'success') {
+                secDiscount_amt = (nextAmt * data.discount / 100);
+                discount_prt = data.discount;
+                // console.log('Seasonal Discount Applied: ' + discount_amt.toFixed(2));
+              }
+            }
+          });
+        }
+        $('.m_ticket_netAmt').val(Math.round(gstAmt + totalAmt - secDiscount_amt));
+        nextAmt = Math.round(gstAmt + totalAmt - discount_amt);
+      }
+      $('.m_ticket_discount').val(secDiscount_amt.toFixed(2));
+      $('#m_ticket_disprt').val(discount_prt);
 
       // let paidamt = $("#m_ticket_paidAmt").val();
       // let balamt = Math.round(gstAmt + totalAmt) - paidamt;
       // $('.m_ticket_balAmt').val(balamt);
-      var net_payale = Math.round(gstAmt + totalAmt - discount_amt);
+      // var net_payale = Math.round(gstAmt + totalAmt - discount_amt);
 
       if ($("#m_ticket_paymode").val() == 'Credit') {
         $('#m_ticket_paidAmt').val(0);
-        $('.m_ticket_balAmt').val(net_payale);
+        $('.m_ticket_balAmt').val(nextAmt);
       } else {
-        $('#m_ticket_paidAmt').val(net_payale);
+        $('#m_ticket_paidAmt').val(nextAmt);
         $('.m_ticket_balAmt').val(0);
       }
 
+    });
+
+
+    $("#is_discount_applied").on("change", function() {
+      $(".amountcalculate").trigger("keyup");
     });
 
     $("#m_ticket_paymode").on("change", function() {
@@ -207,7 +242,7 @@
         $('#allcreditdiv').css('display', 'none');
         $('#m_ticket_resp_id').attr('required', true);
         $('#memberverdiv').addClass('d-none');
-        $('#btn-ticket-create').prop('disabled',false);
+        $('#btn-ticket-create').prop('disabled', false);
       } else if (mode == 'Credit') {
 
         $('.cashdiv').css('display', 'none');
@@ -215,14 +250,14 @@
         $('#creditCust_in').css('display', 'block');
         $('#allcreditdiv').css('display', 'block');
         $('#memberverdiv').addClass('d-none');
-        $('#btn-ticket-create').prop('disabled',false);
+        $('#btn-ticket-create').prop('disabled', false);
       } else {
         $('.cashdiv').css('display', 'block');
         $('.paypartial').css('display', 'none');
         $('.plotdiv').css('display', 'block');
         $('#creditCust_in').css('display', 'none');
         $('#allcreditdiv').css('display', 'none');
-        $('#btn-ticket-create').prop('disabled',true);
+        $('#btn-ticket-create').prop('disabled', true);
       }
 
     });
@@ -264,7 +299,7 @@
         $('#childnet').text(Math.round((222.20 * 0.18) + 222.20));
         $('#gst').text('18');
         $('#m_ticket_paymode').val('Members').trigger('change');
-        $('#btn-ticket-create').prop('disabled',true);
+        $('#btn-ticket-create').prop('disabled', true);
       } else if (n == 6 || n == 0 || is_today_holiday == 1) {
         if (text == 'combo') {
           $('#adultbase').text(weekend_adult_combo_rate);
@@ -287,7 +322,8 @@
           $('#gst').text('18');
         }
         $('#memberverdiv').addClass('d-none');
-        $('#btn-ticket-create').prop('disabled',false);
+        $('#m_ticket_paymode').val('Cash').trigger('change');
+        $('#btn-ticket-create').prop('disabled', false);
       } else {
         if (text == 'combo') {
           $('#adultbase').text(weekday_adult_combo_rate);
@@ -309,8 +345,9 @@
           $('#childnet').text(((weekday_child_rate * 0.18) + weekday_child_rate).toFixed(2));
           $('#gst').text('18');
         }
+        $('#m_ticket_paymode').val('Cash').trigger('change');
         $('#memberverdiv').addClass('d-none');
-        $('#btn-ticket-create').prop('disabled',false);
+        $('#btn-ticket-create').prop('disabled', false);
       }
 
 
@@ -413,7 +450,7 @@
                         </div>`);
 
             $('#membimgdiv').html(`<a href="` + member_img + `" target="blank"><img src="` + member_img + `" alt=""></a>`);
-            $('#vermodlbtndiv').append(`<button type="button" onclick="open_cancel_modal('`+data.data.p_member_id+ `','`+data.data.m_plot_no +`','`+ data.data.p_member_name +`','`+ data.data.m_cancel_docs +`','`+ data.data.m_cancel_reason +`','Shop/plot_membership_cancel')" style="margin-bottom: 5px;" class="btn btn-danger btn-sm" id="btn-notverify">Not Verified </button>`);
+            $('#vermodlbtndiv').append(`<button type="button" onclick="open_cancel_modal('` + data.data.p_member_id + `','` + data.data.m_plot_no + `','` + data.data.p_member_name + `','` + data.data.m_cancel_docs + `','` + data.data.m_cancel_reason + `','Shop/plot_membership_cancel')" style="margin-bottom: 5px;" class="btn btn-danger btn-sm" id="btn-notverify">Not Verified </button>`);
             $('#memberverdiv').removeClass('d-none');
             $('#m_cust_name').val(data.data.p_member_name);
             $('#m_ticket_scanCard').val(data.data.p_member_adharno);
@@ -529,11 +566,11 @@
       .then(response => response.json())
       .then(data => {
         if (data.status == 'success') {
-        
+
           $('#m_ticket_plot_file').val(data.filename);
           $('#opencameraModal').modal('hide');
           $('#camera_btn').hide();
-          $('#btn-ticket-create').prop('disabled',false);
+          $('#btn-ticket-create').prop('disabled', false);
           swal(data.message, {
             icon: "success",
             timer: 1000,
@@ -550,6 +587,4 @@
         console.error('Error sending image to server:', error);
       });
   });
-
- 
 </script>

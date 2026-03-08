@@ -571,6 +571,8 @@ class Main_model extends CI_model
       "m_ticket_city" => $this->input->post('m_ticket_city') ?: 0,
       "m_ticket_remark" => $this->input->post('m_ticket_remark') ?: 0,
       "m_ticket_cusType" => $this->input->post('m_ticket_cusType'),
+      "is_discount_applied" => $this->input->post('is_discount_applied') ? 1 : 0,
+      "m_ticket_disprt" => $this->input->post('m_ticket_disprt') ? : 0,
       "m_ticket_ispartial" => $this->input->post('m_ticket_ispartial') ?: 0,
       "m_ticket_paytype" => $this->input->post('m_ticket_paytype'),
       "m_ticket_paytype2" => $this->input->post('m_ticket_paytype2') ?: 0,

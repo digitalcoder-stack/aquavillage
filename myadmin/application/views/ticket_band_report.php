@@ -94,7 +94,7 @@
                 <td colspan="2">sign</td>
             </tr>
             <tr>
-                <td colspan="2" style="width: 20%;">adult (<?= $tik_data['wp_bands']['adult_rate'] ?>)</td>
+                <td colspan="2" style="width: 20%;">Family (<?= $tik_data['wp_bands']['adult_rate'] ?>)</td>
                 <td colspan="2"><?= $tik_data['wp_adult'] ?></td>
                 <td colspan="2"><?= ($tik_data['wp_bands']['adult_rate'] * $tik_data['wp_adult']) ?></td>
                 <td onclick="viewbanddetail(`<?= $tik_data['wp_bands']['adult_bandid'] ?>`,`<?= $date ?>`)"><?= $tik_data['wp_bands']['adult_band'] ?></td>
@@ -104,7 +104,7 @@
                 <td colspan="2"></td>
             </tr>
             <tr>
-                <td colspan="2" style="width: 20%;">child (<?= $tik_data['wp_bands']['child_rate'] ?>)</td>
+                <td colspan="2" style="width: 20%;">Stag (<?= $tik_data['wp_bands']['child_rate'] ?>)</td>
                 <td colspan="2"><?= $tik_data['wp_child'] ?></td>
                 <td colspan="2"><?= ($tik_data['wp_bands']['child_rate'] * $tik_data['wp_child']) ?></td>
                 <td onclick="viewbanddetail(`<?= $tik_data['wp_bands']['child_bandid'] ?>`,`<?= $date ?>`)"><?= $tik_data['wp_bands']['child_band'] ?></td>
@@ -137,7 +137,7 @@
                 <th class="color text-start" colspan="12">adventure park</th>
             </tr>
             <tr>
-                <td colspan="2" style="width: 20%;">adult (<?= $tik_data['ap_bands']['adult_rate'] ?>)</td>
+                <td colspan="2" style="width: 20%;">Family (<?= $tik_data['ap_bands']['adult_rate'] ?>)</td>
                 <td colspan="2"><?= $tik_data['ap_adult'] ?></td>
                 <td colspan="2"><?= ($tik_data['ap_bands']['adult_rate'] * $tik_data['ap_adult']) ?></td>
                 <td onclick="viewbanddetail(`<?= $tik_data['ap_bands']['adult_bandid'] ?>`,`<?= $date ?>`)"><?= $tik_data['ap_bands']['adult_band'] ?></td>
@@ -147,7 +147,7 @@
                 <td colspan="2"></td>
             </tr>
             <tr>
-                <td colspan="2" style="width: 20%;">child (<?= $tik_data['ap_bands']['child_rate'] ?>)</td>
+                <td colspan="2" style="width: 20%;">Stag (<?= $tik_data['ap_bands']['child_rate'] ?>)</td>
                 <td colspan="2"><?= $tik_data['ap_child'] ?></td>
                 <td colspan="2"><?= ($tik_data['ap_bands']['child_rate'] * $tik_data['ap_child']) ?></td>
                 <td onclick="viewbanddetail(`<?= $tik_data['ap_bands']['child_bandid'] ?>`,`<?= $date ?>`)"><?= $tik_data['ap_bands']['child_band'] ?></td>

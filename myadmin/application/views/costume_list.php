@@ -110,8 +110,8 @@ $logged_user_type = $this->session->userdata('user_type');
                                 <th>Dated</th>
                                 <th>Mode</th>
                                 <th>Mobile No</th>
-                                <th>Adult</th>
-                                <th>Child</th>
+                                <th>Family</th>
+                                <th>Stag</th>
                                 <th>CustomerName</th>
                                 <th>Created on</th>
                                 <th>Refund</th>

@@ -476,7 +476,7 @@ class Setup_model extends CI_model
 
 	//========================== band  =============================//
 
-	public function get_all_band($status='',$colour='')
+	public function get_all_band($status = '', $colour = '')
 	{
 
 		if (!empty($status)) {
@@ -488,7 +488,7 @@ class Setup_model extends CI_model
 
 		$this->db->select('master_bands_tbl.*,m_hq_name');
 		$this->db->join('master_hq_tbl', 'master_hq_tbl.m_hq_id = master_bands_tbl.m_band_color', 'left');
-		$res = $this->db->order_by('m_band_id','desc')->get('master_bands_tbl')->result();
+		$res = $this->db->order_by('m_band_id', 'desc')->get('master_bands_tbl')->result();
 		// if (!empty($res)) {
 		// 	foreach ($res as $key => $value) {
 		// 		$stock_bal= $this->Student_model->get_bands_stock_detail($value->m_band_color, date('Y-m-d'), date('Y-m-d'));
@@ -548,21 +548,21 @@ class Setup_model extends CI_model
 		}
 	}
 
-	
-	
+
+
 	public function delete_band()
 	{
 		$this->db->where('m_band_id', $this->input->post('delete_id'));
 		return $this->db->delete('master_bands_tbl');
 	}
-	
-	
+
+
 
 	//=========================================== band ===============================================//
 
 	//=========================================== band Maintainance ===============================================//
 
-	public function get_band_history($from_date='',$to_date='',$colour='',$bnd_no='')
+	public function get_band_history($from_date = '', $to_date = '', $colour = '', $bnd_no = '')
 	{
 
 		if (!empty($from_date)) {
@@ -571,7 +571,7 @@ class Setup_model extends CI_model
 		if (!empty($to_date)) {
 			$this->db->where('DATE_FORMAT(bm_addedon,"%Y-%m-%d")<=', $to_date);
 		}
-		
+
 		if (!empty($colour)) {
 			$this->db->where('bm_colour', $colour);
 		}
@@ -584,19 +584,19 @@ class Setup_model extends CI_model
 		$this->db->join('master_bands_tbl', 'master_bands_tbl.m_band_id = band_management_tbl.bm_bandno', 'left');
 		$this->db->join('master_hq_tbl', 'master_hq_tbl.m_hq_id = band_management_tbl.bm_colour', 'left');
 		$res = $this->db->get('band_management_tbl')->result();
-		
+
 		return $res;
 	}
 
-	public function get_lastband_maintaince($bnd_no='')
+	public function get_lastband_maintaince($bnd_no = '')
 	{
 		if (!empty($bnd_no)) {
 			$this->db->where('bm_bandno', $bnd_no);
 		}
 
 		$this->db->select('bm_addedon,DATEDIFF(current_date, bm_addedon) as days');
-		$res = $this->db->order_by('bm_id','desc')->get('band_management_tbl')->row();
-		
+		$res = $this->db->order_by('bm_id', 'desc')->get('band_management_tbl')->row();
+
 		return $res;
 	}
 
@@ -613,7 +613,7 @@ class Setup_model extends CI_model
 			"bm_addedby" => $this->session->userdata('user_id'),
 		);
 
-	return	$this->db->insert('band_management_tbl', $s_data);
+		return	$this->db->insert('band_management_tbl', $s_data);
 	}
 	//=========================================== band Maintainance ===============================================//
 
@@ -955,7 +955,7 @@ class Setup_model extends CI_model
 			$this->db->where('DATE_FORMAT(m_expense_added_on,"%Y-%m-%d")>=', $from_date);
 			$this->db->where('DATE_FORMAT(m_expense_added_on,"%Y-%m-%d")<=', $to_date);
 		}
-		$res = $this->db->where('m_expense_mode', 1)->order_by('m_expense_id','desc')->get('master_expense_tbl')->result();
+		$res = $this->db->where('m_expense_mode', 1)->order_by('m_expense_id', 'desc')->get('master_expense_tbl')->result();
 		return $res;
 	}
 
@@ -971,7 +971,7 @@ class Setup_model extends CI_model
 			$this->db->where('DATE_FORMAT(m_expense_added_on,"%Y-%m-%d")>=', $from_date);
 			$this->db->where('DATE_FORMAT(m_expense_added_on,"%Y-%m-%d")<=', $to_date);
 		}
-		$res = $this->db->where('m_expense_mode', 2)->order_by('m_expense_id','desc')->get('master_expense_tbl')->result();
+		$res = $this->db->where('m_expense_mode', 2)->order_by('m_expense_id', 'desc')->get('master_expense_tbl')->result();
 		return $res;
 	}
 
@@ -1246,6 +1246,171 @@ class Setup_model extends CI_model
 		return true;
 	}
 	//======================================================= payment =================================================//
+
+	//======================================================= discount =================================================//
+
+	public function get_discount_list()
+	{
+		$result = [];
+
+		$this->db->select('discount_code, discount_name, start_date, end_date, discount_status, created_at');
+		$this->db->group_by('discount_code');
+		$this->db->order_by('discount_id', 'DESC');
+
+		$res = $this->db->get('ticket_discounts')->result();
+
+		if (empty($res)) {
+			return [];
+		}
+
+		/* get all ranges in one query */
+		$codes = array_column($res, 'discount_code');
+
+		$ranges = $this->db
+			->select('discount_id, discount_code, min_pack, max_pack, discount_percent')
+			->where_in('discount_code', $codes)
+			->get('ticket_discounts')
+			->result();
+
+		$range_map = [];
+
+		foreach ($ranges as $r) {
+			$range_map[$r->discount_code][] = [
+				"discount_id" => $r->discount_id,
+				"min_pack" => $r->min_pack,
+				"max_pack" => $r->max_pack,
+				"discount_percent" => $r->discount_percent
+			];
+		}
+
+		foreach ($res as $value) {
+			$value->discount_ranges = $range_map[$value->discount_code] ?? [];
+			$result[] = $value;
+		}
+
+		return $result;
+	}
+
+	public function get_discount_dtl($code)
+	{
+		$rows = $this->db
+			->where('discount_code', $code)
+			->order_by('min_pack', 'ASC')
+			->get('ticket_discounts')
+			->result();
+
+		if (empty($rows)) {
+			return [];
+		}
+
+		$response = [
+			"discount_code" => $rows[0]->discount_code,
+			"discount_name" => $rows[0]->discount_name,
+			"start_date" => $rows[0]->start_date,
+			"end_date" => $rows[0]->end_date,
+			"discount_status" => $rows[0]->discount_status,
+			"discount_ranges" => []
+		];
+
+		foreach ($rows as $r) {
+			$response["discount_ranges"][] = [
+				"discount_id" => $r->discount_id,
+				"min_pack" => $r->min_pack,
+				"max_pack" => $r->max_pack,
+				"discount_percent" => $r->discount_percent
+			];
+		}
+
+		return $response;
+	}
+
+	public function insert_discount()
+	{
+		$discount_code = $this->input->post('discount_code');
+
+		if (empty($discount_code)) {
+
+			$last = $this->db->select('discount_code')
+				->order_by('discount_id', 'DESC')
+				->limit(1)
+				->get('ticket_discounts')
+				->row();
+
+			$num = 1;
+
+			if ($last) {
+				$num = (int) substr($last->discount_code, -3) + 1;
+			}
+
+			$discount_code = 'DISC' . str_pad($num, 3, '0', STR_PAD_LEFT);
+		}
+
+		$discount_id = $this->input->post('discount_id');
+		$min_packs = $this->input->post('min_pack');
+		$max_packs = $this->input->post('max_pack');
+		$percents = $this->input->post('discount_percent');
+
+		$data_common = [
+			'discount_code' => $discount_code,
+			'discount_name' => $this->input->post('discount_name'),
+			'start_date' => $this->input->post('start_date'),
+			'end_date' => $this->input->post('end_date'),
+			'discount_status' => $this->input->post('discount_status'),
+			'created_by' => $this->session->userdata('user_id'),
+			'created_at' => date('Y-m-d H:i')
+		];
+
+		foreach ($min_packs as $key => $min) {
+
+			$data = $data_common;
+
+			$data['min_pack'] = $min;
+			$data['max_pack'] = $max_packs[$key] ?? null;
+			$data['discount_percent'] = $percents[$key];
+
+			if (!empty($discount_id[$key])) {
+				$res = $this->db->where('discount_id', $discount_id[$key])->update('ticket_discounts', $data);
+				$res1 = 2;
+			} else {
+				$res = $this->db->insert('ticket_discounts', $data);
+				$res1 = 1;
+			}
+		}
+		return $res1;
+	}
+
+	public function delete_discount()
+	{
+		$code = $this->input->post('delete_id');
+
+		$this->db->where('discount_code', $code);
+		return $this->db->delete('ticket_discounts');
+	}
+
+	public function get_applicable_discount()
+	{
+		$pack_size = $this->input->post('pack_size');
+		$current_date = date('Y-m-d');
+		
+		$this->db->select('discount_percent')
+		->from('ticket_discounts')
+		->where('discount_status', 1)
+		->where('start_date <=', $current_date)
+		->where('end_date >=', $current_date)
+		->where('min_pack <=', $pack_size)
+		->where('max_pack >=', $pack_size)
+		->order_by('discount_percent', 'DESC')->limit(1);
+		$query = $this->db->get();
+
+		if ($query->num_rows() > 0) {
+			$discount = $query->row()->discount_percent;
+		} else {
+			$discount = 0;
+		}
+		return $discount;
+	}
+
+	//======================================================= discount =================================================//
 
 
 
