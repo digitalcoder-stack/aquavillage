@@ -160,7 +160,18 @@
 
     //============================shop============================//
 
+    $(".packqty").on("change", function() {
+      if (this.id == 'm_ticket_adult') {
+        $("#m_ticket_adult").prop('readonly', false);
+        $("#m_ticket_child").val(0).prop('readonly', true);
+      } else if (this.id == 'm_ticket_child') {
+        $("#m_ticket_child").prop('readonly', false);
+        $("#m_ticket_adult").val(0).prop('readonly', true);
+      }
+    });
+
     $(".amountcalculate").on("keyup", function() {
+
       let adultCount = $("#m_ticket_adult").val();
       let childCount = $("#m_ticket_child").val();
       let adultbase = parseFloat($("#adultbase").text());
@@ -183,6 +194,7 @@
 
       let secDiscount_amt = 0;
       let discount_prt = 0;
+      let pack20total = 0;
 
       if ($("#is_discount_applied").is(":checked")) {
         let pack_size = parseInt(adultCount) + parseInt(childCount);
@@ -197,7 +209,12 @@
             async: false, // Make it synchronous to wait for response
             success: function(data) {
               if (data.status == 'success') {
-                secDiscount_amt = (nextAmt * data.discount / 100);
+                if (pack_size > 20) {
+                  pack20total = (20 * nextAmt / pack_size);
+                  secDiscount_amt = (pack20total * data.discount / 100);
+                } else {
+                  secDiscount_amt = (nextAmt * data.discount / 100);
+                }
                 discount_prt = data.discount;
                 // console.log('Seasonal Discount Applied: ' + discount_amt.toFixed(2));
               }
@@ -205,10 +222,18 @@
           });
         }
         $('.m_ticket_netAmt').val(Math.round(gstAmt + totalAmt - secDiscount_amt));
-        nextAmt = Math.round(gstAmt + totalAmt - discount_amt);
+        nextAmt = Math.round(gstAmt + totalAmt - secDiscount_amt);
+        $('.m_ticket_discount').val(secDiscount_amt.toFixed(2));
+        $('#m_ticket_disprt').val(discount_prt);
+      }else {
+        if($('#m_ticket_paymode').val() != 'Members'){
+           $('.m_ticket_discount').val(secDiscount_amt.toFixed(2));
+           $('#m_ticket_disprt').val(discount_prt);
+        }else {
+           nextAmt = Math.round(gstAmt + totalAmt - discount_amt);
+           $('.m_ticket_netAmt').val(Math.round(gstAmt + totalAmt - discount_amt));
+        }
       }
-      $('.m_ticket_discount').val(secDiscount_amt.toFixed(2));
-      $('#m_ticket_disprt').val(discount_prt);
 
       // let paidamt = $("#m_ticket_paidAmt").val();
       // let balamt = Math.round(gstAmt + totalAmt) - paidamt;
@@ -240,16 +265,16 @@
 
         $('#creditCust_in').css('display', 'none');
         $('#allcreditdiv').css('display', 'none');
-        $('#m_ticket_resp_id').attr('required', true);
         $('#memberverdiv').addClass('d-none');
         $('#btn-ticket-create').prop('disabled', false);
       } else if (mode == 'Credit') {
-
+        
         $('.cashdiv').css('display', 'none');
         $('.plotdiv').css('display', 'none');
         $('#creditCust_in').css('display', 'block');
         $('#allcreditdiv').css('display', 'block');
         $('#memberverdiv').addClass('d-none');
+        $('#m_ticket_resp_id').attr('required', true);
         $('#btn-ticket-create').prop('disabled', false);
       } else {
         $('.cashdiv').css('display', 'block');

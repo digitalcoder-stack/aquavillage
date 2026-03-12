@@ -386,7 +386,7 @@ class Student_model extends CI_model
     if (!empty($to_date)) {
       $this->db->where('DATE_FORMAT(m_ticket_added_on,"%Y-%m-%d")<=', $to_date);
     }
-    $ticket = $this->db->select('m_ticket_id,m_ticket_paytype,m_ticket_paidAmt,m_ticket_paymode,m_ticket_gstAmt,m_ticket_ispartial,m_ticket_paytype2,m_ticket_paidAmt2,m_ticket_head,m_ticket_adult,m_ticket_child,m_ticket_free,m_ticket_balAmt,m_ticket_discount,m_ticket_refund,m_ticket_netAmt,m_lead_advance,m_lead_paymode')->join('master_lead_tbl', 'master_lead_tbl.m_lead_id = tickets_wp_tbl.m_ticket_lead_id', 'left')->where('m_ticket_status', 1)->get('tickets_wp_tbl')->result();
+    $ticket = $this->db->select('m_ticket_id,m_ticket_paytype,m_ticket_paidAmt,m_ticket_paymode,m_ticket_gstAmt,m_ticket_ispartial,m_ticket_paytype2,m_ticket_paidAmt2,m_ticket_head,m_ticket_adult,m_ticket_child,m_ticket_free,m_ticket_balAmt,m_ticket_discount,m_ticket_refund,m_ticket_netAmt,m_lead_advance,m_lead_paymode,is_discount_applied')->join('master_lead_tbl', 'master_lead_tbl.m_lead_id = tickets_wp_tbl.m_ticket_lead_id', 'left')->where('m_ticket_status', 1)->get('tickets_wp_tbl')->result();
 
     $Ticket_balance = 0;
     $Ticket_discount = 0;
@@ -479,6 +479,9 @@ class Student_model extends CI_model
         if (strtoupper($key->m_ticket_paymode) == 'MEMBERS') {
           $Ticket_discount += 0;
           $Total_buissness += ($key->m_ticket_gstAmt);
+        } else if($key->is_discount_applied == 1){ 
+          $Ticket_discount += $key->m_ticket_discount;
+          $Total_buissness += ($key->m_ticket_netAmt + $key->m_ticket_discount);
         } else {
           $Ticket_discount += $key->m_ticket_discount;
           $Total_buissness += ($key->m_ticket_netAmt);
