@@ -1287,6 +1287,14 @@
                                         <span>Ticket Report</span>
                                     </a>
                                 <?php  }
+                                if ($logged_user_type == 1 || has_perm($logged_user_id, 'RPT', 'CTP')) { ?>
+                                    <a href="<?php echo base_url('Reports/ticket_comparison_report') ?>" class="new-nav-link <?php if ($this->uri->segment(2) == 'ticket_comparison_report') {
+                                                                                                                        echo 'active';
+                                                                                                                    } ?>">
+                                        <img src="<?php echo base_url('assets/img/icons/tck_rpt.png') ?>">
+                                        <span>Comparison Report</span>
+                                    </a>
+                                <?php  }
                                 if ($logged_user_type == 1 || has_perm($logged_user_id, 'RPT', 'STK')) { ?>
                                     <a href="<?php echo site_url('Reports/stock_report') ?>" class="new-nav-link <?php if ($this->uri->segment(2) == 'stock_report') {
                                                                                                                         echo 'active';

@@ -160,6 +160,8 @@ $logged_user_type = $this->session->userdata('user_type');
                         $ap_t_adult = 0;
                         $cb_t_child = 0;
                         $cb_t_adult = 0;
+                        $mb_t_child = 0;
+                        $mb_t_adult = 0;
                         $total_child = 0;
                         $total_adult = 0;
                         $total_amount = 0;
@@ -170,6 +172,9 @@ $logged_user_type = $this->session->userdata('user_type');
                                 if ($value->m_ticket_head == 1) {
                                     $wp_t_adult += $value->m_ticket_adult;
                                     $wp_t_child += $value->m_ticket_child;
+                                } else if ($value->m_ticket_head == 2) {
+                                    $mb_t_child += $value->m_ticket_child;
+                                    $mb_t_adult += $value->m_ticket_adult;
                                 } else if ($value->m_ticket_head == 4) {
                                     $ap_t_adult += $value->m_ticket_adult;
                                     $ap_t_child += $value->m_ticket_child;
@@ -294,6 +299,14 @@ $logged_user_type = $this->session->userdata('user_type');
                                         <td><?= $cb_t_adult ?></td>
                                         <td><?= $cb_t_child ?></td>
                                         <td><?= ($cb_t_child + $cb_t_adult) ?></td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Member</td>
+                                        <td><?= $mb_t_adult ?></td>
+                                        <td><?= $mb_t_child ?></td>
+                                        <td><?= ($mb_t_child + $mb_t_adult) ?></td>
 
                                     </tr>
 

@@ -1606,6 +1606,27 @@ class Student_model extends CI_model
     }
   }
 
+public function get_month_ticket_data($start,$end)
+{
+    $this->db->select("
+        DATE(m_ticket_date) as date,
+        SUM(m_ticket_adult) as adult,
+        SUM(m_ticket_child) as child,
+        SUM(m_ticket_free) as free,
+        (SUM(m_ticket_adult)+SUM(m_ticket_child)+SUM(m_ticket_free)) as person,
+        SUM(m_ticket_netAmt) as revenue
+    ");
+
+    $this->db->from('tickets_wp_tbl');
+
+    $this->db->where('DATE(m_ticket_date) >=',$start);
+    $this->db->where('DATE(m_ticket_date) <=',$end);
+    $this->db->where('m_ticket_status',1);
+
+    $this->db->group_by('DATE(m_ticket_date)');
+
+    return $this->db->get()->result_array();
+}
 
   //////=============================== reports=========================================////////
 

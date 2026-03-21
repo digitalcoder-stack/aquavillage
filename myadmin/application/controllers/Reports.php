@@ -68,6 +68,96 @@ class Reports extends CI_Controller
         }
     }
 
+    public function ticket_comparison_report()
+    {
+        $data = $this->login_details();
+        $data['pagename'] = "Comparison Report";
+       
+        $first_period  = $this->input->post('first_period') ?? date('Y-m', strtotime('-1 year'));
+        $second_period = $this->input->post('second_period') ?? date('Y-m');
+
+        $start1 = $first_period . '-01';
+        $end1   = date("Y-m-t", strtotime($start1));
+
+        $start2 = $second_period . '-01';
+        $end2   = date("Y-m-t", strtotime($start2));
+
+        $data2025 = $this->Student_model->get_month_ticket_data($start1, $end1);
+        $data2026 = $this->Student_model->get_month_ticket_data($start2, $end2);
+
+        /* convert to date index */
+        $map1 = [];
+        foreach ($data2025 as $row) {
+            $map1[$row['date']] = $row;
+        }
+
+        $map2 = [];
+        foreach ($data2026 as $row) {
+            $map2[$row['date']] = $row;
+        }
+
+        /* weekday alignment */
+        $start1 = new DateTime($start1);
+        $end1   = new DateTime($end1);
+
+        $start2 = new DateTime($start2);
+        $end2   = new DateTime($end2);
+
+        /* find first matching weekday */
+        while ($start1->format('N') != $start2->format('N')) {
+            $start2->modify('+1 day');
+        }
+
+        $d1 = clone $start1;
+        $d2 = clone $start2;
+
+        $monthStart2 = new DateTime($second_period . '-01');
+
+        $report = [];
+
+        while ($d1 <= $end1) {
+
+            $date1 = $d1->format('Y-m-d');
+            $date2 = $d2->format('Y-m-d');
+
+            /* wrap month if exceeded */
+            if ($d2 > $end2) {
+                $d2 = clone $monthStart2;
+                $date2 = $d2->format('Y-m-d');
+            }
+
+            $r1 = $map1[$date1] ?? ['adult' => 0, 'child' => 0, 'free' => 0, 'person' => 0, 'revenue' => 0];
+            $r2 = $map2[$date2] ?? ['adult' => 0, 'child' => 0, 'free' => 0, 'person' => 0, 'revenue' => 0];
+
+            $report[] = [
+                'day' => $d1->format('l'),
+
+                'date1' => $date1,
+                'adult1' => $r1['adult'],
+                'child1' => $r1['child'],
+                'free1' => $r1['free'],
+                'person1' => $r1['person'],
+                'revenue1' => $r1['revenue'],
+
+                'date2' => $date2,
+                'adult2' => $r2['adult'],
+                'child2' => $r2['child'],
+                'free2' => $r2['free'],
+                'person2' => $r2['person'],
+                'revenue2' => $r2['revenue']
+            ];
+
+            $d1->modify('+1 day');
+            $d2->modify('+1 day');
+        }
+
+        $data['report'] = $report;
+        $data['first_period'] = $first_period;
+        $data['second_period'] = $second_period;
+
+        $this->load->view('ticket_comparison_report', $data);
+    }
+
     //==========================Details===========================//
     protected function login_details()
     {

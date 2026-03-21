@@ -188,7 +188,7 @@
       $('.m_ticket_totalAmt').val(totalAmt.toFixed(2));
 
       let gstAmt = totalAmt * gst;
-      let nextAmt = Math.round(gstAmt + totalAmt);
+      let nextAmt = Math.round((gstAmt + totalAmt ) /10) * 10;
       $('.m_ticket_gstAmt').val(gstAmt.toFixed(2))
       $('.m_ticket_netAmt').val(nextAmt);
 
@@ -221,8 +221,8 @@
             }
           });
         }
-        $('.m_ticket_netAmt').val(Math.round(gstAmt + totalAmt - secDiscount_amt));
-        nextAmt = Math.round(gstAmt + totalAmt - secDiscount_amt);
+        nextAmt = Math.round((gstAmt + totalAmt - secDiscount_amt) /10) * 10;
+        $('.m_ticket_netAmt').val(nextAmt);
         $('.m_ticket_discount').val(secDiscount_amt.toFixed(2));
         $('#m_ticket_disprt').val(discount_prt);
       }else {
@@ -230,8 +230,8 @@
            $('.m_ticket_discount').val(secDiscount_amt.toFixed(2));
            $('#m_ticket_disprt').val(discount_prt);
         }else {
-           nextAmt = Math.round(gstAmt + totalAmt - discount_amt);
-           $('.m_ticket_netAmt').val(Math.round(gstAmt + totalAmt - discount_amt));
+           nextAmt = Math.round((gstAmt + totalAmt - discount_amt) /10) * 10;
+           $('.m_ticket_netAmt').val(nextAmt);
         }
       }
 
