@@ -3,15 +3,27 @@
 class Main_model extends CI_model
 {
 
-  public function get_customer_list($from_date, $to_date)
+  public function get_customer_list($from_date, $to_date, $limit = null, $offset = null)
   {
 
     if (!empty($from_date) && !empty($to_date)) {
       $this->db->where('DATE_FORMAT(m_cust_added_on,"%Y-%m-%d")>=', $from_date);
       $this->db->where('DATE_FORMAT(m_cust_added_on,"%Y-%m-%d")<=', $to_date);
     }
+    if (!empty($limit)) {
+      $this->db->limit($limit, $offset);
+    }
     $res = $this->db->get('master_customer_tbl')->result();
     return $res;
+  }
+
+  public function get_customer_count($from_date, $to_date)
+  {
+    if (!empty($from_date) && !empty($to_date)) {
+      $this->db->where('DATE_FORMAT(m_cust_added_on,"%Y-%m-%d")>=', $from_date);
+      $this->db->where('DATE_FORMAT(m_cust_added_on,"%Y-%m-%d")<=', $to_date);
+    }
+    return $this->db->count_all_results('master_customer_tbl');
   }
 
   public function get_Active_customer()

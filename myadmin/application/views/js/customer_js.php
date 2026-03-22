@@ -1,5 +1,111 @@
 <script type="text/javascript"> $(document).ready(function(e) {
-//============================User============================//
+
+//============================ AJAX Pagination ============================//
+var activeFilters  = (typeof CUSTOMER_INIT !== 'undefined') ? CUSTOMER_INIT : {};
+var ajaxInProgress = false;
+
+function fetchCustomers(page, filters) {
+    if (ajaxInProgress) return;
+    ajaxInProgress = true;
+
+    $('#customer_loader').show();
+    $('#customer_tbody').hide(); 
+    $('#customer_pagination').hide();
+
+    var params = {
+        from_date : filters.from_date || '',
+        to_date   : filters.to_date   || '',
+        page      : page              || 1
+    };
+
+    $.ajax({
+        url     : "<?php echo site_url('Setup/customer_list_ajax'); ?>",
+        method  : 'POST',
+        data    : params,
+        dataType: 'json',
+        success : function (res) {
+            if (res.status !== 'ok') {
+                $('#customer_tbody').html('<tr><td colspan="7" class="text-center text-danger">An error occurred.</td></tr>');
+                return;
+            }
+            $('#customer_tbody').html(res.html);
+            buildPagination(res.total, res.per_page, res.page, filters);
+        },
+        error: function (xhr, status, err) {
+            $('#customer_tbody').html('<tr><td colspan="7" class="text-center text-danger">Request failed.</td></tr>');
+        },
+        complete: function () {
+            ajaxInProgress = false;
+            $('#customer_loader').hide();
+            $('#customer_tbody').show();
+            $('#customer_pagination').show();
+        }
+    });
+}
+
+function buildPagination(total, perPage, currentPage, filters) {
+    var totalPages = Math.ceil(total / perPage);
+    var $pg = $('#customer_pagination').empty();
+
+    if (totalPages <= 1) return;
+
+    var html = '';
+
+    if (currentPage > 1) {
+        html += '<button class="btn btn-sm btn-secondary cust-page-btn" data-page="' + (currentPage - 1) + '">&laquo; Prev</button>';
+    }
+
+    var startPage = Math.max(1, currentPage - 3);
+    var endPage   = Math.min(totalPages, currentPage + 3);
+
+    if (startPage > 1) {
+        html += '<button type="button" class="btn btn-sm btn-outline-secondary cust-page-btn" data-page="1">1</button>';
+        if (startPage > 2) html += '<span class="btn btn-sm disabled">…</span>';
+    }
+    for (var p = startPage; p <= endPage; p++) {
+        var cls = (p === parseInt(currentPage)) ? 'btn-primary' : 'btn-outline-primary';
+        html += '<button type="button" class="btn btn-sm ' + cls + ' cust-page-btn" data-page="' + p + '">' + p + '</button>';
+    }
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) html += '<span class="btn btn-sm disabled">…</span>';
+        html += '<button type="button" class="btn btn-sm btn-outline-secondary cust-page-btn" data-page="' + totalPages + '">' + totalPages + '</button>';
+    }
+
+    if (currentPage < totalPages) {
+        html += '<button type="button" class="btn btn-sm btn-secondary cust-page-btn" data-page="' + (parseInt(currentPage) + 1) + '">Next &raquo;</button>';
+    }
+
+    html += '<small class="text-muted" style="display:block;width:100%;text-align:center;margin-top:4px;">Page ' + currentPage + ' of ' + totalPages + ' &nbsp;|&nbsp; ' + total + ' total records</small>';
+
+    $pg.html(html);
+
+    $pg.off('click', '.cust-page-btn').on('click', '.cust-page-btn', function (e) {
+        e.preventDefault();
+        fetchCustomers(parseInt($(this).data('page'), 10), activeFilters);
+    });
+}
+
+// Initial Data Fetch
+if ($('#customer_tbody').length > 0) {
+    fetchCustomers(1, activeFilters);
+
+    // Intercept Search Button (NOT Excel Button)
+    $('form[action="<?php echo site_url('Setup/customer_list') ?>"] button[type="submit"]:not([name="Excel"])').on('click', function(e) {
+        e.preventDefault();
+        activeFilters.from_date = $('input[name="from_date"]').first().val();
+        activeFilters.to_date = $('input[name="to_date"]').first().val();
+        fetchCustomers(1, activeFilters);
+    });
+
+    // Date inputs exact sync
+    $('input[name="from_date"], input[name="to_date"]').on('change', function() {
+        activeFilters.from_date = $('input[name="from_date"]').first().val();
+        activeFilters.to_date = $('input[name="to_date"]').first().val();
+        fetchCustomers(1, activeFilters);
+    });
+}
+//============================ /AJAX Pagination ============================//
+
 
 //============================User============================//
 $("form#frm-user-create").submit(function(e) { e.preventDefault();

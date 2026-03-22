@@ -92,25 +92,22 @@ $logged_user_type = $this->session->userdata('user_type');
 
                     <div class="seipkon-breadcromb-left">
                         <form action="<?= base_url('Reports/monthly_report') ?>" method="get">
-                            <div class="row" style="display: flex; justify-content:space-between">
-                                <div class="col-md-2">
+                            <div class="row">
+                                <div class="col-md-2 col-sm-6 col-xs-12">
                                     <h3>Monthly Report</h3>
                                 </div>
-
-                                <div class="col-md-10">
-                                    <div class="row" style="display: flex;justify-content: end;">
-                                        <div class="col-md-2">
+                                <div class="col-md-10 col-sm-6 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-md-2 col-sm-6 col-xs-12 col-md-offset-8">
                                             <input class="form-control stkinpfilt" onchange="this.form.submit();" style="width: 100%;" type="month" min="<?= date('2023-12') ?>" max="<?= date('Y-m') ?>" name="month_in" id="month_in" value="<?php echo $month_in; ?>">
                                         </div>
-                                        <div class="col-md-1">
+                                        <div class="col-md-1 col-sm-6 col-xs-12">
                                             <a onclick="printcustomdiv()" class="btn btn-success btn-sm">
                                                 <i class="fa fa-printer me-2"></i>Print
                                             </a>
                                         </div>
                                     </div>
-
                                 </div>
-
                             </div>
                         </form>
 
@@ -125,6 +122,7 @@ $logged_user_type = $this->session->userdata('user_type');
                                 <h5>Date: <?= date('d-m-Y') ?></h5>
                             </div>
                         </div>
+                        <div class="table-responsive">
                         <table id="monthly_tbl" class="table table-bordered">
                             <thead>
                                 <tr>
@@ -206,6 +204,7 @@ $logged_user_type = $this->session->userdata('user_type');
                             </tfoot>
 
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

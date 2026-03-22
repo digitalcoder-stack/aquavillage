@@ -77,30 +77,29 @@ $logged_user_type = $this->session->userdata('user_type');
 
                         <form method="post" action="<?= base_url('Reports/ticket_comparison_report') ?>" class="mb-3">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-2 col-sm-6 col-xs-12">
                                     <label class="form-check-label">Period 1</label>
                                     <input class="form-control" style="width: 100%;" type="month" name="first_period" id="first_period" value="<?php echo $first_period; ?>">
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 col-sm-6 col-xs-12">
                                     <label class="form-check-label">Period 2</label>
                                     <input class="form-control" style="width: 100%;" type="month" name="second_period" id="second_period" value="<?php echo $second_period; ?>">
                                 </div>
-                                <div class="col-md-1" style="margin-top: 25px;">
+                                <div class="col-md-1 col-sm-4 col-xs-6" style="margin-top: 25px;">
                                     <button type="submit" class="btn btn-primary">Compare</button>
                                 </div>
-                                <div class="col-md-1" style="margin-top: 25px;">
+                                <div class="col-md-1 col-sm-4 col-xs-6" style="margin-top: 25px;">
                                     <input type="checkbox" name="show_detail" id="show_detail" value="1">
                                     <label for="show_detail">Show Detail</label>
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                     <label class="form-check-label">Search</label>
-                                    <input type="text" id="search" class="form-control" placeholder="Search by date or day" style="width: 300px;">
+                                <div class="col-md-3 col-sm-12 col-xs-12 mb-3">
+                                    <label class="form-check-label">Search</label>
+                                    <input type="text" id="search" class="form-control" placeholder="Search by date or day" style="width: 100%; max-width: 300px;">
                                 </div>
                             </div>
-
-
                         </form>
 
+                        <div class="table-responsive">
                         <table class="table table-bordered" id="report-table">
 
                             <thead>
@@ -183,6 +182,7 @@ $logged_user_type = $this->session->userdata('user_type');
                             </tfoot>
 
                         </table>
+                        </div>
 
                     </div>
                 </div>

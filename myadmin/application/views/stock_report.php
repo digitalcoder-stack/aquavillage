@@ -87,7 +87,7 @@ $logged_user_type = $this->session->userdata('user_type');
 
         <div class="row">
 
-            <div class="col-md-10">
+            <div class="col-md-9 col-sm-12">
                 <div class="page-box">
                     <?php switch ($godown) {
                         case 1: {
@@ -129,6 +129,7 @@ $logged_user_type = $this->session->userdata('user_type');
                                 <h5>Date: <?= date('d-m-Y') ?></h5>
                             </div>
                         </div>
+                        <div class="table-responsive">
                         <table id="allStock_tbl" class="table table-bordered">
                             <thead>
                                 <tr>
@@ -192,11 +193,12 @@ $logged_user_type = $this->session->userdata('user_type');
                                 </tfoot> -->
 
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-3 col-sm-12">
                 <div class="page-box">
                     <form action="<?= base_url('Reports/stock_report') ?>" method="get">
                         <div class="row">

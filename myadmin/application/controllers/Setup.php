@@ -919,8 +919,74 @@ class Setup extends CI_Controller
     if (!empty($this->input->post('Excel'))) {
       $this->excelForcustomer($data['from_date'], $data['to_date']);
     }
-    $data['mech_value'] = $this->Main_model->get_customer_list($data['from_date'], $data['to_date']);
+    $data['mech_value'] = array();
     $this->load->view('customer_list', $data);
+  }
+
+  public function customer_list_ajax()
+  {
+    if ($this->ajax_login() === false) {
+      return;
+    }
+
+    $from_date = $this->input->post('from_date');
+    $to_date = $this->input->post('to_date');
+    $page = $this->input->post('page');
+
+    $per_page = 500;
+    $offset = ($page > 1) ? ($page - 1) * $per_page : 0;
+
+    $total_records = $this->Main_model->get_customer_count($from_date, $to_date);
+    $customers = $this->Main_model->get_customer_list($from_date, $to_date, $per_page, $offset);
+
+    $html = '';
+    $i = $offset + 1;
+    $logged_user_type = $this->session->userdata('user_type');
+    $logged_user_id = $this->session->userdata('user_id');
+
+    if (!empty($customers)) {
+        foreach ($customers as $value) {
+            $original_date = $value->m_cust_added_on;
+            $new_date = date("d-m-Y", strtotime($original_date));
+            $status = ($value->m_cust_status == 1) ? "Active" : "In-Active";
+
+            $html .= '<tr>';
+            $html .= '<td>' . $i . '</td>';
+            $html .= '<td>' . htmlspecialchars($value->m_cust_name) . '</td>';
+            $html .= '<td>' . htmlspecialchars($value->m_cust_mobile) . '</td>';
+            $html .= '<td>' . htmlspecialchars($value->m_cust_email) . '</td>';
+            // $html .= '<td>' . htmlspecialchars($value->m_cust_gender) . '</td>';
+            $html .= '<td>' . $new_date . '</td>';
+            $html .= '<td>' . $status . '</td>';
+            $html .= '<td class="wd-30">';
+            $html .= '<a href="' . base_url('Setup/view_user_dtl?id=') . $value->m_cust_id . '" class="btn btn-info btn-action" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+            
+            if ($logged_user_type == 1 || has_perm($logged_user_id, 'Setup', 'Cust', 'Edit')) {
+                $html .= ' <a href="' . base_url('Setup/add_customer?id=') . $value->m_cust_id . '" class="btn btn-info btn-action" title="Edit" data-toggle="tooltip"><i class="fa fa-edit"></i></a>';
+            }
+            if ($logged_user_type == 1 || has_perm($logged_user_id, 'Setup', 'Cust', 'Delete')) {
+                $html .= ' <button class="btn btn-danger btn-action delete-user" data-value="' . $value->m_cust_id . '" title="Delete" data-toggle="tooltip"><i class="fa fa-trash"></i></button>';
+            }
+            $html .= '</td>';
+            $html .= '</tr>';
+            
+            $i++;
+        }
+    } else {
+        $html .= '<tr><td colspan="7" class="text-center">No Data Found</td></tr>';
+    }
+
+    $response = array(
+        'status' => 'ok',
+        'html' => $html,
+        'total' => $total_records,
+        'page' => $page,
+        'per_page' => $per_page
+    );
+
+    $this->output
+         ->set_content_type('application/json')
+         ->set_output(json_encode($response));
   }
 
   public function add_customer()

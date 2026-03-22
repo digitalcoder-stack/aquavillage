@@ -1449,7 +1449,7 @@ class Student_model extends CI_model
 
   //////=============================== reports=========================================////////
 
-  public function get_ticket_report($from_date, $to_date, $type = '', $filed = '', $fval = '')
+  public function get_ticket_report($from_date, $to_date, $type = '', $filed = '', $fval = '', $limit = 0, $offset = 0)
   {
     $this->db->select('tickets_wp_tbl.*,m_emp_code,m_emp_name,m_saleshead_title,m_city_name,m_cashacc_name,m_cust_name,m_cust_mobile,m_plot_name,m_plot_type,(CASE WHEN m_ticket_paytype = 1 THEN "Cash" WHEN m_ticket_paytype = 2 THEN "Paytm" WHEN m_ticket_paytype = 3 THEN "Phone Pe" WHEN m_ticket_paytype = 4 THEN "other" ELSE "INVAILD" END) AS paytype');
     $this->db->join('master_customer_tbl', 'master_customer_tbl.m_cust_id = tickets_wp_tbl.m_ticket_customer', 'left');
@@ -1471,13 +1471,51 @@ class Student_model extends CI_model
       $this->db->where($filed, $fval);
     }
     $this->db->where('m_ticket_status', 1);
+    if ($limit > 0) {
+      $this->db->limit($limit, $offset);
+    }
     $res = $this->db->get('tickets_wp_tbl')->result_array();
 
     // echo $this->db->last_query(); die ;
     return $res;
   }
 
-  public function get_bandwise_ticket($from_date, $to_date, $type, $bacolour = '')
+  public function get_ticket_report_count($from_date, $to_date, $type = '', $filed = '', $fval = '')
+  {
+    $this->db->join('master_customer_tbl', 'master_customer_tbl.m_cust_id = tickets_wp_tbl.m_ticket_customer', 'left');
+    $this->db->join('master_employee_tbl', 'master_employee_tbl.m_emp_id = tickets_wp_tbl.m_ticket_resp_id', 'left');
+    $this->db->join('master_saleshead_tbl', 'master_saleshead_tbl.m_saleshead_id = tickets_wp_tbl.m_ticket_head', 'left');
+    $this->db->join('master_city_tbl', 'master_city_tbl.m_city_id = tickets_wp_tbl.m_ticket_city', 'left');
+    $this->db->join('master_cashacc_tbl', 'master_cashacc_tbl.m_cashacc_id = tickets_wp_tbl.m_ticket_counter', 'left');
+    $this->db->join('master_plots_tbl', 'master_plots_tbl.m_plot_no = tickets_wp_tbl.m_ticket_plot_no', 'left');
+    if (!empty($from_date)) {
+      $this->db->where('DATE_FORMAT(m_ticket_added_on,"%Y-%m-%d")>=', $from_date);
+    }
+    if (!empty($to_date)) {
+      $this->db->where('DATE_FORMAT(m_ticket_added_on,"%Y-%m-%d")<=', $to_date);
+    }
+    if (!empty($type) && $type == 2 && !empty($filed) && !empty($fval)) {
+      $this->db->where($filed, $fval);
+    }
+    $this->db->where('m_ticket_status', 1);
+    if (!empty($type) && $type == 1 && !empty($filed)) {
+      // grouped summary: count distinct groups
+      $this->db->select('COUNT(DISTINCT ' . $this->db->protect_identifiers($filed) . ') as cnt');
+      $row = $this->db->get('tickets_wp_tbl')->row_array();
+      return isset($row['cnt']) ? (int)$row['cnt'] : 0;
+    }
+    return $this->db->count_all_results('tickets_wp_tbl');
+  }
+
+  public function get_bandwise_ticket_count($from_date, $to_date, $bacolour = '')
+  {
+    if (!empty($bacolour)) {
+      $this->db->where('m_hq_id', $bacolour);
+    }
+    return $this->db->where('m_hq_type', 4)->where('m_hq_status', 1)->count_all_results('master_hq_tbl');
+  }
+
+  public function get_bandwise_ticket($from_date, $to_date, $type, $bacolour = '', $limit = 0, $offset = 0)
   {
     if (!empty($bacolour)) {
       $this->db->where('m_hq_id', $bacolour);
@@ -1563,6 +1601,13 @@ class Student_model extends CI_model
           $result[] = $res;
         }
       }
+    }
+    if (empty($result)) {
+      return [];
+    }
+    // Apply PHP-side slice for pagination (band aggregation happens in PHP loop above)
+    if ($limit > 0) {
+      return array_slice($result, $offset, $limit);
     }
     return $result;
   }

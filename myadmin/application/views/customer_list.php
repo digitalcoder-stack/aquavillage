@@ -83,8 +83,15 @@
             </div>
         </div>
         <div class="page-box">
-            <div class="advance-table table-overflow">
-                <table id="user_tbl" class="my_custom_datatable table table-striped table-bordered">
+            <!-- Loader -->
+            <div id="customer_loader" style="display: none; text-align: center; padding: 30px 0;">
+                <div class="spinner-border text-primary" style="width: 2.5rem; height: 2.5rem; border-width: 4px;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+
+            <div class="advance-table table-responsive">
+                <table id="user_tbl" class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -97,47 +104,25 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <?php
-                        $i = 1;
-                        if (!empty($mech_value)) {
-                            foreach ($mech_value as $value) {
-                                $original_date = $value->m_cust_added_on;
-                                $new_date = date("d-m-Y", strtotime($original_date));
-                        ?>
-                                <tr>
-                                    <td><?php echo $i; ?></td>
-                                    <td><?php echo $value->m_cust_name; ?></td>
-                                    <td><?php echo $value->m_cust_mobile; ?></td>
-                                    <td><?php echo $value->m_cust_email; ?></td>
-                                    <!-- <td><?php echo $value->m_cust_gender; ?></td> -->
-                                    <td><?php echo $new_date; ?></td>
-                                    <td><?php if ($value->m_cust_status == 1) echo "Active";
-                                        else {
-                                            echo "In-Active";
-                                        } ?></td>
-
-                                    <td class="wd-30">
-
-                                        <a href="<?php echo base_url('Setup/view_user_dtl?id=') . $value->m_cust_id; ?>" class="btn btn-info btn-action" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                        <?php if ($logged_user_type == 1 || has_perm($logged_user_id, 'Setup', 'Cust', 'Edit')) { ?>
-                                        <a href="<?php echo base_url('Setup/add_customer?id=') . $value->m_cust_id; ?>" class="btn btn-info btn-action" title="Edit" data-toggle="tooltip"><i class="fa fa-edit"></i></a>
-                                        <?php }if ($logged_user_type == 1 || has_perm($logged_user_id, 'Setup', 'Cust', 'Delete')) { ?>
-                                        <button class="btn btn-danger btn-action delete-user" data-value="<?php echo $value->m_cust_id; ?>" title="Delete" data-toggle="tooltip"><i class="fa fa-trash"></i></button>
-                                        <?php } ?>
-                                    </td>
-                                </tr>
-                        <?php
-                                $i++;
-                            }
-                        }
-                        ?>
+                    <tbody id="customer_tbody">
+                        <!-- AJAX content will be loaded here -->
                     </tbody>
                 </table>
+            </div>
+            
+            <!-- Pagination Controls -->
+            <div id="customer_pagination" style="display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; align-items: center; margin-top: 15px;">
+                <!-- Pagination buttons will be loaded here -->
             </div>
         </div>
     </div>
 </div>
+<script>
+    const CUSTOMER_INIT = {
+        from_date: "<?php echo isset($from_date) ? $from_date : ''; ?>",
+        to_date: "<?php echo isset($to_date) ? $to_date : ''; ?>"
+    };
+</script>
 <?php $this->view('top_footer');
 $this->view('js/customer_js');
 $this->view('js/custom_js'); ?>
