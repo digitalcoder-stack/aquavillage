@@ -20,26 +20,28 @@ class Reports extends CI_Controller
     // ===================== AJAX Endpoint ======================== //
     public function ticket_report_ajax()
     {
-        if (!$this->ajax_login()) return;
+        if (!$this->ajax_login())
+            return;
 
-        $per_page   = 500;
-        $from_date  = $this->input->post('from_date') ?: date('Y-m-d');
-        $to_date    = $this->input->post('to_date')   ?: date('Y-m-d');
-        $type       = (int)($this->input->post('type') ?: 2);
-        $filed      = $this->input->post('filed');
-        $fval       = $this->input->post('fval');
-        $fun        = (int)($this->input->post('fun')  ?: 1);
-        $page       = max(1, (int)($this->input->post('page') ?: 1));
-        $offset     = ($page - 1) * $per_page;
+        $per_page = 500;
+        $from_date = $this->input->post('from_date') ?: date('Y-m-d');
+        $to_date = $this->input->post('to_date') ?: date('Y-m-d');
+        $type = (int)($this->input->post('type') ?: 2);
+        $filed = $this->input->post('filed');
+        $fval = $this->input->post('fval');
+        $fun = (int)($this->input->post('fun') ?: 1);
+        $page = max(1, (int)($this->input->post('page') ?: 1));
+        $offset = ($page - 1) * $per_page;
 
-        $logged_user_id   = $this->session->userdata('user_id');
+        $logged_user_id = $this->session->userdata('user_id');
         $logged_user_type = $this->session->userdata('user_type');
 
         if ($fun == 9) {
-            $total        = $this->Student_model->get_bandwise_ticket_count($from_date, $to_date, $fval);
+            $total = $this->Student_model->get_bandwise_ticket_count($from_date, $to_date, $fval);
             $ticket_value = $this->Student_model->get_bandwise_ticket($from_date, $to_date, $type, $fval, $per_page, $offset);
-        } else {
-            $total        = $this->Student_model->get_ticket_report_count($from_date, $to_date, $type, $filed, $fval);
+        }
+        else {
+            $total = $this->Student_model->get_ticket_report_count($from_date, $to_date, $type, $filed, $fval);
             $ticket_value = $this->Student_model->get_ticket_report($from_date, $to_date, $type, $filed, $fval, $per_page, $offset);
         }
 
@@ -50,7 +52,8 @@ class Reports extends CI_Controller
         ob_start();
         if ($type == 1) {
             $this->_render_summary_rows($ticket_value, $fun, $from_date, $to_date, $filed);
-        } else {
+        }
+        else {
             $this->_render_detail_rows($ticket_value, $logged_user_id, $logged_user_type);
         }
         $html = ob_get_clean();
@@ -59,20 +62,21 @@ class Reports extends CI_Controller
         ob_start();
         if ($type == 1) {
             $this->_render_summary_footer($ticket_value);
-        } else {
+        }
+        else {
             $this->_render_detail_footer($ticket_value);
         }
         $footer_html = ob_get_clean();
 
         $this->output->set_content_type('application/json');
         echo json_encode([
-            'status'       => 'ok',
-            'html'         => $html,
-            'footer_html'  => $footer_html,
-            'total'        => (int)$total,
-            'page'         => $page,
-            'per_page'     => $per_page,
-            'type'         => $type,
+            'status' => 'ok',
+            'html' => $html,
+            'footer_html' => $footer_html,
+            'total' => (int)$total,
+            'page' => $page,
+            'per_page' => $per_page,
+            'type' => $type,
             'heading_data' => $heading_data,
         ]);
     }
@@ -82,15 +86,15 @@ class Reports extends CI_Controller
     private function _build_heading($fun, $ticket_value)
     {
         $heads = [
-            1 => ['mainhead' => 'All Tickets',          'subhead' => ''],
-            2 => ['mainhead' => 'City Wise',             'subhead' => isset($ticket_value[0]['m_city_name'])       ? $ticket_value[0]['m_city_name']       : ''],
-            3 => ['mainhead' => 'Ticket Type Wise',      'subhead' => isset($ticket_value[0]['m_saleshead_title']) ? $ticket_value[0]['m_saleshead_title'] : ''],
-            4 => ['mainhead' => 'Cash Counter Wise',     'subhead' => isset($ticket_value[0]['m_cashacc_name'])    ? $ticket_value[0]['m_cashacc_name']    : ''],
-            5 => ['mainhead' => 'Cash Ticket List',      'subhead' => ''],
-            6 => ['mainhead' => 'Members Ticket List',   'subhead' => ''],
-            7 => ['mainhead' => 'Credit Ticket List',    'subhead' => ''],
-            8 => ['mainhead' => 'Payment Method Wise',   'subhead' => isset($ticket_value[0]['paytype'])           ? $ticket_value[0]['paytype']           : ''],
-            9 => ['mainhead' => 'Band Wise',             'subhead' => isset($ticket_value[0]['m_band_colour'])     ? $ticket_value[0]['m_band_colour']     : ''],
+            1 => ['mainhead' => 'All Tickets', 'subhead' => ''],
+            2 => ['mainhead' => 'City Wise', 'subhead' => isset($ticket_value[0]['m_city_name']) ? $ticket_value[0]['m_city_name'] : ''],
+            3 => ['mainhead' => 'Ticket Type Wise', 'subhead' => isset($ticket_value[0]['m_saleshead_title']) ? $ticket_value[0]['m_saleshead_title'] : ''],
+            4 => ['mainhead' => 'Cash Counter Wise', 'subhead' => isset($ticket_value[0]['m_cashacc_name']) ? $ticket_value[0]['m_cashacc_name'] : ''],
+            5 => ['mainhead' => 'Cash Ticket List', 'subhead' => ''],
+            6 => ['mainhead' => 'Members Ticket List', 'subhead' => ''],
+            7 => ['mainhead' => 'Credit Ticket List', 'subhead' => ''],
+            8 => ['mainhead' => 'Payment Method Wise', 'subhead' => isset($ticket_value[0]['paytype']) ? $ticket_value[0]['paytype'] : ''],
+            9 => ['mainhead' => 'Band Wise', 'subhead' => isset($ticket_value[0]['m_band_colour']) ? $ticket_value[0]['m_band_colour'] : ''],
         ];
         return isset($heads[$fun]) ? $heads[$fun] : ['mainhead' => '', 'subhead' => ''];
     }
@@ -104,15 +108,32 @@ class Reports extends CI_Controller
         $i = 1;
         foreach ($ticket_value as $value) {
             switch ($fun) {
-                case 2: $mode = $value['m_city_name'];       $mode_id = $value['m_ticket_city'];    break;
-                case 3: $mode = $value['m_saleshead_title']; $mode_id = $value['m_ticket_head'];    break;
-                case 4: $mode = $value['m_cashacc_name'];    $mode_id = $value['m_ticket_counter']; break;
-                case 8: $mode = $value['paytype'];           $mode_id = $value['m_ticket_paytype']; break;
-                case 9: $mode = $value['m_band_colour'];     $mode_id = $value['m_colour_id'];      break;
-                default: $mode = ''; $mode_id = '';
+                case 2:
+                    $mode = $value['m_city_name'];
+                    $mode_id = $value['m_ticket_city'];
+                    break;
+                case 3:
+                    $mode = $value['m_saleshead_title'];
+                    $mode_id = $value['m_ticket_head'];
+                    break;
+                case 4:
+                    $mode = $value['m_cashacc_name'];
+                    $mode_id = $value['m_ticket_counter'];
+                    break;
+                case 8:
+                    $mode = $value['paytype'];
+                    $mode_id = $value['m_ticket_paytype'];
+                    break;
+                case 9:
+                    $mode = $value['m_band_colour'];
+                    $mode_id = $value['m_colour_id'];
+                    break;
+                default:
+                    $mode = '';
+                    $mode_id = '';
             }
             $href = base_url('Reports/ticket_report?from_date=') . $from_date . '&to_date=' . $to_date . '&fun=' . $fun . '&type=2&filed=' . $filed . '&fval=' . $mode_id;
-            echo '<tr onclick="window.location.href=\''. $href . '\'">';
+            echo '<tr onclick="window.location.href=\'' . $href . '\'">';
             echo '<td>' . $i . '</td>';
             echo '<td>' . htmlspecialchars($mode) . '</td>';
             echo '<td>' . $value['total_adult'] . '</td>';
@@ -130,17 +151,17 @@ class Reports extends CI_Controller
         $total_adult = $total_child = $total_free = $total_person = $total_amount = 0;
         if (!empty($ticket_value)) {
             foreach ($ticket_value as $v) {
-                $total_adult  += $v['total_adult'];
-                $total_child  += $v['total_child'];
-                $total_free   += $v['total_free'];
+                $total_adult += $v['total_adult'];
+                $total_child += $v['total_child'];
+                $total_free += $v['total_free'];
                 $total_person += $v['total_person'];
                 $total_amount += $v['total_netamt'];
             }
         }
         echo '<th colspan="2"></th>';
-        echo '<th>' . $total_adult  . '</th>';
-        echo '<th>' . $total_child  . '</th>';
-        echo '<th>' . $total_free   . '</th>';
+        echo '<th>' . $total_adult . '</th>';
+        echo '<th>' . $total_child . '</th>';
+        echo '<th>' . $total_free . '</th>';
         echo '<th>' . $total_person . '</th>';
         echo '<th>' . $total_amount . '</th>';
     }
@@ -153,7 +174,7 @@ class Reports extends CI_Controller
         }
         $i = 1;
         foreach ($ticket_value as $value) {
-            $can_edit   = ($logged_user_type == 1 || has_perm($logged_user_id, 'WP', 'TC', 'Edit'));
+            $can_edit = ($logged_user_type == 1 || has_perm($logged_user_id, 'WP', 'TC', 'Edit'));
             $can_delete = ($logged_user_type == 1 || has_perm($logged_user_id, 'WP', 'TC', 'Delete'));
             echo '<tr>';
             echo '<td>' . $i . '</td>';
@@ -186,8 +207,8 @@ class Reports extends CI_Controller
         $total_adult = $total_child = $total_amount = 0;
         if (!empty($ticket_value)) {
             foreach ($ticket_value as $v) {
-                $total_adult  += $v['m_ticket_adult'];
-                $total_child  += $v['m_ticket_child'];
+                $total_adult += $v['m_ticket_adult'];
+                $total_child += $v['m_ticket_child'];
                 $total_amount += $v['m_ticket_netAmt'];
             }
         }
@@ -248,15 +269,15 @@ class Reports extends CI_Controller
     {
         $data = $this->login_details();
         $data['pagename'] = "Comparison Report";
-       
-        $first_period  = $this->input->post('first_period') ?? date('Y-m', strtotime('-1 year'));
+
+        $first_period = $this->input->post('first_period') ?? date('Y-m', strtotime('-1 year'));
         $second_period = $this->input->post('second_period') ?? date('Y-m');
 
         $start1 = $first_period . '-01';
-        $end1   = date("Y-m-t", strtotime($start1));
+        $end1 = date("Y-m-t", strtotime($start1));
 
         $start2 = $second_period . '-01';
-        $end2   = date("Y-m-t", strtotime($start2));
+        $end2 = date("Y-m-t", strtotime($start2));
 
         $data2025 = $this->Student_model->get_month_ticket_data($start1, $end1);
         $data2026 = $this->Student_model->get_month_ticket_data($start2, $end2);
@@ -274,10 +295,10 @@ class Reports extends CI_Controller
 
         /* weekday alignment */
         $start1 = new DateTime($start1);
-        $end1   = new DateTime($end1);
+        $end1 = new DateTime($end1);
 
         $start2 = new DateTime($start2);
-        $end2   = new DateTime($end2);
+        $end2 = new DateTime($end2);
 
         /* find first matching weekday */
         while ($start1->format('N') != $start2->format('N')) {
@@ -306,7 +327,8 @@ class Reports extends CI_Controller
             $r2 = $map2[$date2] ?? ['adult' => 0, 'child' => 0, 'free' => 0, 'person' => 0, 'revenue' => 0];
 
             $report[] = [
-                'day' => $d1->format('l'),
+                'day1' => $d1->format('l'),
+                'day2' => $d2->format('l'),
 
                 'date1' => $date1,
                 'adult1' => $r1['adult'],
@@ -349,7 +371,8 @@ class Reports extends CI_Controller
         $is_user_in = $this->session->userdata('is_user_in');
         if (isset($is_user_in) || $is_user_in == true) {
             return;
-        } else {
+        }
+        else {
             redirect('Login');
         }
     }
@@ -359,11 +382,12 @@ class Reports extends CI_Controller
         $is_user_in = $this->session->userdata('is_user_in');
         if (isset($is_user_in) || $is_user_in == true) {
             return true;
-        } else {
+        }
+        else {
             echo json_encode(array('status' => 'error', 'message' => 'You are not Logged in Now!! Please login again.'));
             return false;
         }
     }
-    //=====================/Login Validation======================//
+//=====================/Login Validation======================//
 
 }

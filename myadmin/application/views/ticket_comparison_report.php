@@ -106,22 +106,23 @@ $logged_user_type = $this->session->userdata('user_type');
 
                                 <tr>
                                     <th rowspan="2">Sno</th>
-                                    <th rowspan="2">Date</th>
-                                    <th rowspan="2">Day</th>
-
-                                    <th class="thperiod" colspan="1" style="text-align: center;">Period <?= date('Y F', strtotime($first_period)) ?></th>
-                                    <th class="thperiod" colspan="1" style="text-align: center;">Period <?= date('Y F', strtotime($second_period)) ?></th>
+                                    <th class="thperiod" colspan="3" style="text-align: center;">Period <?= date('Y F', strtotime($first_period)) ?></th>
+                                    <th class="thperiod" colspan="3" style="text-align: center;">Period <?= date('Y F', strtotime($second_period)) ?></th>
                                     <th rowspan="2">Difference</th>
 
 
                                 </tr>
 
                                 <tr>
+                                    <th>Date</th>
+                                    <th>Day</th>
                                     <th class="detail-col">Family</th>
                                     <th class="detail-col">Stag</th>
                                     <th class="detail-col">Free</th>
                                     <th>Total Packs</th>
                                     <th class="detail-col">Revenue</th>
+                                    <th>Date</th>
+                                    <th>Day</th>
                                     <th class="detail-col">Family</th>
                                     <th class="detail-col">Stag</th>
                                     <th class="detail-col">Free</th>
@@ -139,14 +140,16 @@ $logged_user_type = $this->session->userdata('user_type');
                                     <tr>
                                         <td><?= ($cr + 1) ?></td>
                                         <td><?php echo date('d M Y', strtotime($r['date1'])); ?></td>
-                                        <td><?php echo $r['day']; ?></td>
-
+                                        <td><?php echo $r['day1']; ?></td>
+                                        
                                         <td class="detail-col"><?php echo $r['adult1']; ?></td>
                                         <td class="detail-col"><?php echo $r['child1']; ?></td>
                                         <td class="detail-col"><?php echo $r['free1']; ?></td>
                                         <td><?php echo $r['person1']; ?></td>
                                         <td class="detail-col">₹<?php echo number_format($r['revenue1']); ?></td>
-
+                                        
+                                        <td><?php echo date('d M Y', strtotime($r['date2'])); ?></td>
+                                        <td><?php echo $r['day2']; ?></td>
                                         <td class="detail-col"><?php echo $r['adult2']; ?></td>
                                         <td class="detail-col"><?php echo $r['child2']; ?></td>
                                         <td class="detail-col"><?php echo $r['free2']; ?></td>
@@ -169,7 +172,7 @@ $logged_user_type = $this->session->userdata('user_type');
                                     <td class="detail-col">0</td>
                                     <td>0</td>
                                     <td class="detail-col">₹0</td>
-
+                                    <td colspan="2"></td>
                                     <td class="detail-col">0</td>
                                     <td class="detail-col">0</td>
                                     <td class="detail-col">0</td>
@@ -201,9 +204,9 @@ $logged_user_type = $this->session->userdata('user_type');
         $('#show_detail').change(function() {
             if ($(this).is(':checked')) {
                 $('.detail-col').show();
-                $('.thperiod').attr('colspan', 5);
+                $('.thperiod').attr('colspan', 7);
             } else {
-                $('.thperiod').attr('colspan', 1);
+                $('.thperiod').attr('colspan', 3);
                 $('.detail-col').hide();
             }
         });
